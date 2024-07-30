@@ -11,7 +11,6 @@
     color: red;
 }
 
-
 @media screen and (min-width : 768px){
     .authForm{
         width: 55%;

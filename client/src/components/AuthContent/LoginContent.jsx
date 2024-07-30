@@ -12,6 +12,7 @@ function LoginContent() {
 
   let navigate = useNavigate()
   const [loading, setLoading] = useState(false)
+
   let formik = useFormik({
     initialValues:{
       email:'',
@@ -36,6 +37,15 @@ function LoginContent() {
       }
     }
   })
+
+  const handleGoogleLogin = async() => {
+    let serverBaseURL = import.meta.env.VITE_SERVER_URL
+    try {      
+      window.open(`${serverBaseURL}/auth/google/callback`,'_self')
+    } catch (error) {
+      toast.error(error.response.data.message || error.message)
+    }
+  }
 
   return <>
     <Container>
@@ -63,7 +73,7 @@ function LoginContent() {
           <div className='text-center mt-3'>New User? <Link to={'/register'} className='loginText'>Register</Link></div>
           <hr style={{color:"blue"}}/>
           <div className="d-grid mt-4 mb-3">
-            <Button className='formBtns' variant='danger' onClick={()=>navigate('/register')}>Sign Up with Google</Button>
+            <Button className='formBtns' variant='danger' onClick={handleGoogleLogin}>Sign Up with Google</Button>
           </div>
         </Form>
       </Col>

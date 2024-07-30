@@ -27,7 +27,7 @@ const AppRoutes = [
     },
     {
         path : '/home',
-        element : <Suspense fallback={<LoadingComponent/>}><AuthenticationProtectedRoute><HomePage/></AuthenticationProtectedRoute></Suspense>,
+        element : <Suspense fallback={<LoadingComponent/>}><><HomePage/></></Suspense>,
         exact : true
     },
     {

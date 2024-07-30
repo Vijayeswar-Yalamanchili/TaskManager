@@ -1,7 +1,10 @@
 import axios from 'axios'
 
+let serverBaseURL = import.meta.env.VITE_SERVER_URL
+
 const AxiosService = axios.create({
-    baseURL : "http://localhost:8000",
+    baseURL : `${serverBaseURL}`,
+    // baseURL : "http://localhost:6005",
     // baseURL : 'https://farmkettle.onrender.com',
     headers : {
         "Content-Type" :"application/json",
