@@ -1,0 +1,31 @@
+.myNavTab{
+    display: none;
+}
+
+.myNavsIcon{
+    width: 8rem;
+}
+
+.myRespMenuDrpdwn{
+    width: 12rem;
+    background-color: white;
+    z-index: 5;
+    border-radius: 10px !important;
+    border: 1px solid #6EACDA;
+    position: absolute;
+    top: 4.25rem;
+    right: 2.5rem;
+}
+
+@media screen and (min-width : 768px){
+    .myNavs{
+        width: 12rem;
+        justify-content: space-around;
+    }
+    .myNavTab{
+        display: block;
+    }
+    .myAuthBtns,.myRespMenuDrpdwn{
+        display: none !important;
+    }
+}

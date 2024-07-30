@@ -1,0 +1,25 @@
+.forgotPasswordText, .loginText {
+    color: #6EACDA;
+    text-decoration: none;
+}
+
+.authForm {
+    border: 1px solid #6EACDA;
+}
+
+.authErrorText{
+    color: red;
+}
+
+
+@media screen and (min-width : 768px){
+    .authForm{
+        width: 55%;
+    }
+}
+
+@media screen and (min-width : 1024px){
+    .authForm{
+        width: 35%;
+    }
+}
