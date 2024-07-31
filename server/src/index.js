@@ -17,8 +17,8 @@ const clientSecret = process.env.CLIENT_SECRET
 // middlewares
 const app = express()
 app.use(cors({
-    // origin : process.env.CLIENT_URL ,
-    origin : 'http://localhost:5173',
+    origin : process.env.CLIENT_URL ,
+    // origin : 'http://localhost:5173',
     methods : 'GET, POST, PUT,DELETE',
     credentials : true
 }));
