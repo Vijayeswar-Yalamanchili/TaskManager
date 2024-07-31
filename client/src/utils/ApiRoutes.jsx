@@ -19,10 +19,6 @@ const ApiRoutes = {
     path : '/googlelogin/success',
     authenticate : false
   },
-  GOOGLELOGINUSER : {
-    path : '/google/login',
-    authenticate : false
-  },
   GOOGLELOGOUT : {
     path : '/googlelogout',
     authenticate : true

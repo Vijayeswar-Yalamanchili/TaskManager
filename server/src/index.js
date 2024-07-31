@@ -45,20 +45,17 @@ passport.use(
         try {
             let user = await GoogleAuthModel.findOne({googleId : profile.id})
             if(!user){
-            //     let olduser = await GoogleAuthModel.findOneAndUpdate({googleId : profile.id},{$set : {isLoggedIn : true}},{new:true})
-            //     return done(null,olduser)
-            // }else{            
-                user = new GoogleAuthModel({
+                let olduser = await GoogleAuthModel.findOneAndUpdate({googleId : profile.id},{$set : {isLoggedIn : true}},{new:true})
+                return done(null,olduser)
+            }else{            
+                let newUser  = await GoogleAuthModel.create({
                     googleId : profile.id,
                     displayName : profile.displayName,
                     email : profile.emails[0].value,
                     image : profile.photos[0].value,
                     isLoggedIn : true
                 })
-                await user.save()
-                // return done(null,user)
             }
-            // console.log("user : ", user)
             return done(null,user)
         } catch (error) {
             return done(error,null)
@@ -66,25 +63,12 @@ passport.use(
     })
 )
 
-// passport.serializeUser((user,done)=>{
-//     done(null,user);
-// })
-
-// passport.deserializeUser((user,done)=>{
-//     done(null,user);
-// });
-
-passport.serializeUser((user,done) => {
-    done(null,user.id)
+passport.serializeUser((user,done)=>{
+    done(null,user);
 })
-passport.deserializeUser(async (id, done) => {
-    try {
-      const user = await GoogleAuthModel.findById(id);
-      done(null, user);
 
-    } catch (error) {
-      done(error, null);
-    }
+passport.deserializeUser((user,done)=>{
+    done(null,user);
 })
 
 // initialize google oauth login
@@ -114,15 +98,15 @@ app.get('/auth/google/callback',passport.authenticate('google',{
 
 app.get('/googlelogin/success', async(req,res) => {
     try {
-        console.log("req.user : ", req.user)
         if(req?.user){
-            console.log('true')
-            console.log(req.user)
-            // res.status(200).send({
-            //     message : "LogIn Successfull",
-            //     user : req?.user
-            // })
-        } else {console.log('false')}
+            // console.log('true')
+            // console.log(req.user)
+            res.status(200).send({
+                message : "LogIn Successfull",
+                user : req?.user
+            })
+        } 
+        // else {console.log('false')}
     } catch (error) {
         res.status(500).send({
             message : "Internal server while logging with Google Account"
