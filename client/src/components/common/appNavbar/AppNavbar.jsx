@@ -56,8 +56,6 @@ function AppNavbar() {
         getUserStatus()
     },[])
 
-    console.log(userData)
-
     return <>
         <div style={{backgroundColor : "#6EACDA", height : "5rem"}}>
             {
