@@ -70,17 +70,17 @@ function AppNavbar() {
     useEffect(() => {
         getGoogleUserStatus(),
         getUserStatus()
-    },[])
+    },[userData,googleUserData])
 
     return <>
         <div style={{backgroundColor : "#6EACDA", height : "5rem"}}>
             {
-                googleUserData.isLoggedIn === true || getLoginToken !==null? 
+                googleUserData?.isLoggedIn === true || getLoginToken !==null? 
                     <div className='d-flex justify-content-between align-items-center px-3' style={{height : '100%'}}>
                         <div><FontAwesomeIcon icon={faListCheck} style={{color : "white", height : "2.5rem"}} onClick={()=> navigate('/home')}/></div>
                         <div className='myNavsIcon d-flex'>
                             {
-                                googleUserLoggedIn ? <>
+                                googleUserData?.isLoggedIn === true ? <>
                                     {
                                         googleUserData ? <Button variant='none' className='myNavTab'><Image src={googleUserData?.image} onClick={()=>navigate('/profile')} style={{ height : '3rem', color : "white", borderRadius : "1.5rem"}}/></Button>
                                         : <Button variant='none' className='myNavTab'><FontAwesomeIcon icon={faUser} onClick={()=>navigate('/profile')} style={{ height : '1.75rem', color : "white"}}/></Button>
