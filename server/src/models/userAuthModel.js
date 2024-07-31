@@ -46,16 +46,10 @@ const userAuthSchema = new mongoose.Schema({
         type:Boolean,
         default:false,
     },
-    addressList : [
-        {
-            address : String
-        }
-    ],
-    cartList : {
-        type : Array,
-        default: [],
+    image : {
+        type : String,
         required : false
-    },
+    }
 },
 { timestamps : true },
 { collection : 'usersList' })

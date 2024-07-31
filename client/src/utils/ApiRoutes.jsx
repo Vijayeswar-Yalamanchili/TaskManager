@@ -22,8 +22,11 @@ const ApiRoutes = {
   GOOGLELOGOUT : {
     path : '/googlelogout',
     authenticate : true
+  },
+  CURRENTUSER : {
+    path : '/users/currentuser',
+    authenticate : true
 },
-  
 }
 
 export default ApiRoutes

@@ -16,7 +16,8 @@ function AppNavbar() {
     let logout = useLogout()
     let navigate = useNavigate()
     const [respMenu, setRespMenu] = useState(false)
-    const [userLoggedIn, setUserLoggedIn] = useState(false)
+    const [googleUserLoggedIn, setGoogleUserLoggedIn] = useState(false)
+    const [googleUserData, setGoogleUserData] = useState([])
     const [userData, setUserData] = useState([])
     const handleRespMenu = () => setRespMenu(!respMenu)
     const getLoginToken = localStorage.getItem('loginToken') ? localStorage.getItem('loginToken')  : null
@@ -39,35 +40,61 @@ function AppNavbar() {
         }
     }
 
-    const getUserStatus = async() => {
+    const getGoogleUserStatus = async() => {
         try {
             let res = await AxiosService.get(`${ApiRoutes.GOOGLELOGIN.path}`, { withCredentials : true })
-            console.log(res.data.user)
             if(res.status === 200){
-                setUserLoggedIn(true)
-                setUserData(res.data.user)
+                setGoogleUserLoggedIn(true)
+                setGoogleUserData(res.data.user)
             }
         } catch (error) {
             toast.error(error.response.data.message || error.message)
         }
     }
 
+    const getUserStatus = async() => {
+        try {
+            if(getLoginToken){
+                let decodedToken = jwtDecode(getLoginToken)
+                let id = decodedToken.id
+                let res = await AxiosService.get(`${ApiRoutes.CURRENTUSER.path}/${id}`, { headers : { 'Authorization' : `${getLoginToken}` } })
+                if(res.status === 200){
+                    setUserData(res.data.user)
+                }
+            }            
+        } catch (error) {
+            toast.error(error.response.data.message || error.message)
+        }
+    }
+
     useEffect(() => {
+        getGoogleUserStatus(),
         getUserStatus()
     },[])
 
     return <>
         <div style={{backgroundColor : "#6EACDA", height : "5rem"}}>
             {
-                userLoggedIn === true || getLoginToken !==null? 
+                googleUserLoggedIn || getLoginToken !==null? 
                     <div className='d-flex justify-content-between align-items-center px-3' style={{height : '100%'}}>
                         <div><FontAwesomeIcon icon={faListCheck} style={{color : "white", height : "2.5rem"}} onClick={()=> navigate('/home')}/></div>
                         <div className='myNavsIcon d-flex'>
                             {
-                                userData ? <Button variant='none' className='myNavTab'><Image src={userData?.image} onClick={()=>navigate('/profile')} style={{ height : '3rem', color : "white"}}/></Button>
-                                : <Button variant='none' className='myNavTab'><FontAwesomeIcon icon={faUser} onClick={()=>navigate('/profile')} style={{ height : '1.75rem', color : "white"}}/></Button>
-                            }                            
-                            <Button variant='none' className='myNavTab'><FontAwesomeIcon icon={faPowerOff} onClick={handleLogout} style={{ height : '1.75rem', color : "white"}}/></Button>
+                                googleUserLoggedIn ? <>
+                                    {
+                                        googleUserData ? <Button variant='none' className='myNavTab'><Image src={googleUserData?.image} onClick={()=>navigate('/profile')} style={{ height : '3rem', color : "white", borderRadius : "1.5rem"}}/></Button>
+                                        : <Button variant='none' className='myNavTab'><FontAwesomeIcon icon={faUser} onClick={()=>navigate('/profile')} style={{ height : '1.75rem', color : "white"}}/></Button>
+                                    }                            
+                                    <Button variant='none' className='myNavTab'><FontAwesomeIcon icon={faPowerOff} onClick={handleLogout} style={{ height : '1.75rem', color : "white"}}/></Button>
+                                </> : 
+                                <>
+                                    {
+                                        userData.image ? <Button variant='none' className='myNavTab'><Image src={userData?.image} onClick={()=>navigate('/profile')} style={{ height : '3rem', color : "white", borderRadius : "1.5rem"}}/></Button>
+                                        :<Button variant='none' className='myNavTab'><FontAwesomeIcon icon={faUser} onClick={()=>navigate('/profile')} style={{ height : '1.75rem', color : "white"}}/></Button>
+                                    }
+                                    <Button variant='none' className='myNavTab'><FontAwesomeIcon icon={faPowerOff} onClick={handleLogout} style={{ height : '1.75rem', color : "white"}}/></Button>
+                                </>
+                            }
                         </div>
                     </div>  
                     :
