@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button } from 'react-bootstrap'
+import { Button, Image } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { jwtDecode } from 'jwt-decode'
@@ -17,10 +17,10 @@ function AppNavbar() {
     let navigate = useNavigate()
     const [respMenu, setRespMenu] = useState(false)
     const [userLoggedIn, setUserLoggedIn] = useState(false)
-    const [user, setUser] = useState([])
+    const [userData, setUserData] = useState([])
     const handleRespMenu = () => setRespMenu(!respMenu)
-    const getLoginToken = localStorage.getItem('loginToken')
-
+    const getLoginToken = localStorage.getItem('loginToken') ? localStorage.getItem('loginToken')  : null
+    
     const handleLogout = async() => {
         try {
             if(getLoginToken)  {
@@ -33,21 +33,19 @@ function AppNavbar() {
             } else {
                 let serverBaseURL = import.meta.env.VITE_SERVER_URL
                 window.open(`${serverBaseURL}/googlelogout`,'_self')
-            }
-            
+            }            
         } catch (error) {
-            // toast.error(error.response.data.message || error.message)
-            toast.error(error.message)
+            toast.error(error.response.data.message || error.message)
         }
     }
 
     const getUserStatus = async() => {
         try {
             let res = await AxiosService.get(`${ApiRoutes.GOOGLELOGIN.path}`, { withCredentials : true })
-            // console.log(res.data)
+            console.log(res.data.user)
             if(res.status === 200){
                 setUserLoggedIn(true)
-                setUser(user)
+                setUserData(res.data.user)
             }
         } catch (error) {
             toast.error(error.response.data.message || error.message)
@@ -58,15 +56,20 @@ function AppNavbar() {
         getUserStatus()
     },[])
 
+    console.log(userData)
+
     return <>
         <div style={{backgroundColor : "#6EACDA", height : "5rem"}}>
             {
-                userLoggedIn === true ? 
+                userLoggedIn === true || getLoginToken !==null? 
                     <div className='d-flex justify-content-between align-items-center px-3' style={{height : '100%'}}>
                         <div><FontAwesomeIcon icon={faListCheck} style={{color : "white", height : "2.5rem"}} onClick={()=> navigate('/home')}/></div>
                         <div className='myNavsIcon d-flex'>
-                            <Button variant='none' className='myNavTab'><FontAwesomeIcon icon={faUser} onClick={()=>navigate('/profile')} style={{ height : '1.5rem', color : "white"}}/></Button>
-                            <Button variant='none' className='myNavTab'><FontAwesomeIcon icon={faPowerOff} onClick={handleLogout} style={{ height : '1.5rem', color : "white"}}/></Button>
+                            {
+                                userData ? <Button variant='none' className='myNavTab'><Image src={userData?.image} onClick={()=>navigate('/profile')} style={{ height : '3rem', color : "white"}}/></Button>
+                                : <Button variant='none' className='myNavTab'><FontAwesomeIcon icon={faUser} onClick={()=>navigate('/profile')} style={{ height : '1.75rem', color : "white"}}/></Button>
+                            }                            
+                            <Button variant='none' className='myNavTab'><FontAwesomeIcon icon={faPowerOff} onClick={handleLogout} style={{ height : '1.75rem', color : "white"}}/></Button>
                         </div>
                     </div>  
                     :

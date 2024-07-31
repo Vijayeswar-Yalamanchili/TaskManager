@@ -1,5 +1,5 @@
 import express from 'express'
-// import googleRoutes from './googleRoutes.js'
+import userAuthRoutes from './userAuthRoutes.js'
 
 const router = express.Router()
 
@@ -9,6 +9,6 @@ const router = express.Router()
 //     })
 // })
 
-// router.use('/google',googleRoutes)
+router.use('/users',userAuthRoutes)
 
 export default router

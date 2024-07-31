@@ -92,7 +92,7 @@ app.get('/googlelogin/success', async(req,res) => {
 })
 
 app.get('/googlelogout',(req,res,next) => {
-    const {googleId} = req.user
+    const {googleId} = req?.user
     req.logout(async function (err) {
         if(err) {return next(err)}
         let logout = await GoogleAuthModel.findOneAndUpdate({googleId : `${googleId}`}, {$set : {isLoggedIn : false}})

@@ -24,7 +24,7 @@ function RegisterContent() {
       },
       validationSchema:Yup.object({       
         firstName:Yup.string().required('Firstname is required').max(20,'Name can not exceed 20 characters').min(3,'firstName can not be shorter than 3 leters'),
-        lastName:Yup.string().required('Lastname is required').max(20,'Name can not exceed 20 characters').min(3,'LastName can not be shorter than 3 leters'),
+        lastName:Yup.string().required('Lastname is required').max(20,'Name can not exceed 20 characters').min(1,'LastName can not be shorter than 3 leters'),
         email:Yup.string().required('Email is required').email('Enter a valid email'),
         mobile:Yup.string().required('Mobile is required').matches(/^\d{10}$/,'Enter a valid mobile number'),
         password:Yup.string().required('Password is required').matches(/^[a-zA-Z0-9!@#$%^&*]{8,15}$/,'Enter a valid Password'),
@@ -36,7 +36,7 @@ function RegisterContent() {
             if(values.password === values.confirmPassword){
               let res = await AxiosService.post(`${ApiRoutes.REGISTER.path}`,values)
               if(res.status === 200){
-                navigate('/login')
+                navigate('/')
               }  
               setLoading(false)   
             }else{
