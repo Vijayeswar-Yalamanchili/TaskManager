@@ -75,26 +75,16 @@ function AppNavbar() {
     return <>
         <div style={{backgroundColor : "#6EACDA", height : "5rem"}}>
             {
-                googleUserData?.isLoggedIn === true && getLoginToken !==null? 
+                getLoginToken !==null ?
                     <div className='d-flex justify-content-between align-items-center px-3' style={{height : '100%'}}>
                         <div><FontAwesomeIcon icon={faListCheck} style={{color : "white", height : "2.5rem"}} onClick={()=> navigate('/home')}/></div>
                         <div className='myNavsIcon d-flex'>
                             {
-                                googleUserData?.isLoggedIn === true ? <>
-                                    {
-                                        googleUserData ? <Button variant='none' className='myNavTab'><Image src={googleUserData?.image} onClick={()=>navigate('/profile')} style={{ height : '3rem', color : "white", borderRadius : "1.5rem"}}/></Button>
-                                        : <Button variant='none' className='myNavTab'><FontAwesomeIcon icon={faUser} onClick={()=>navigate('/profile')} style={{ height : '1.75rem', color : "white"}}/></Button>
-                                    }                            
-                                    <Button variant='none' className='myNavTab'><FontAwesomeIcon icon={faPowerOff} onClick={handleLogout} style={{ height : '1.75rem', color : "white"}}/></Button>
-                                </> : 
-                                <>
-                                    {
-                                        userData.image ? <Button variant='none' className='myNavTab'><Image src={userData?.image} onClick={()=>navigate('/profile')} style={{ height : '3rem', color : "white", borderRadius : "1.5rem"}}/></Button>
-                                        :<Button variant='none' className='myNavTab'><FontAwesomeIcon icon={faUser} onClick={()=>navigate('/profile')} style={{ height : '1.75rem', color : "white"}}/></Button>
-                                    }
-                                    <Button variant='none' className='myNavTab'><FontAwesomeIcon icon={faPowerOff} onClick={handleLogout} style={{ height : '1.75rem', color : "white"}}/></Button>
-                                </>
+                                userData.image ? <Button variant='none' className='myNavTab'><Image src={userData?.image} onClick={()=>navigate('/profile')} style={{ height : '3rem', color : "white", borderRadius : "1.5rem"}}/></Button>
+                                :<Button variant='none' className='myNavTab'><FontAwesomeIcon icon={faUser} onClick={()=>navigate('/profile')} style={{ height : '1.75rem', color : "white"}}/></Button>
                             }
+                            <Button variant='none' className='myNavTab'><FontAwesomeIcon icon={faPowerOff} onClick={handleLogout} style={{ height : '1.75rem', color : "white"}}/></Button>
+
                         </div>
                     </div>  
                     :
@@ -112,8 +102,36 @@ function AppNavbar() {
                             </Button>
                         </div>
                     </div> 
-            }              
-            </div>
+            }
+            {
+                googleUserData?.isLoggedIn === true ?
+                    <div className='d-flex justify-content-between align-items-center px-3' style={{height : '100%'}}>
+                        <div><FontAwesomeIcon icon={faListCheck} style={{color : "white", height : "2.5rem"}} onClick={()=> navigate('/home')}/></div>
+                        <div className='myNavsIcon d-flex'>
+                            {
+                                googleUserData ? <Button variant='none' className='myNavTab'><Image src={googleUserData?.image} onClick={()=>navigate('/profile')} style={{ height : '3rem', color : "white", borderRadius : "1.5rem"}}/></Button>
+                                : <Button variant='none' className='myNavTab'><FontAwesomeIcon icon={faUser} onClick={()=>navigate('/profile')} style={{ height : '1.75rem', color : "white"}}/></Button>
+                            }
+                            <Button variant='none' className='myNavTab'><FontAwesomeIcon icon={faPowerOff} onClick={handleLogout} style={{ height : '1.75rem', color : "white"}}/></Button>
+                        </div>
+                    </div>  
+                    :
+                    <div className='d-flex justify-content-between align-items-center px-3' style={{height : '100%'}}>
+                        <div><FontAwesomeIcon icon={faListCheck} style={{color : "white", height : "2.5rem"}} onClick={()=> navigate('/')}/></div>
+                        <div className='myNavs d-flex'>
+                            <Link to={'/'} className='myNavTab' style={{textDecoration : "none",color : "white"}}>
+                                <Button variant='outline-light' className='myNavBtn'>Login</Button>
+                            </Link>
+                            <Link to={'/register'} className='myNavTab' style={{textDecoration : "none",color : "white"}}>
+                                <Button variant='outline-light' className='myNavBtn'>Register</Button>
+                            </Link>
+                            <Button variant='none' className='myAuthBtns' onClick={()=>handleRespMenu()}>
+                                <FontAwesomeIcon icon={faBars} style={{ height : '1.5rem', color : "white"}}/>
+                            </Button>
+                        </div>
+                    </div> 
+            }
+        </div>
 
             {
                 respMenu ?
