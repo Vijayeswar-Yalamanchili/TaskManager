@@ -75,7 +75,7 @@ function AppNavbar() {
     return <>
         <div style={{backgroundColor : "#6EACDA", height : "5rem"}}>
             {
-                googleUserData?.isLoggedIn === true || getLoginToken !==null? 
+                googleUserData?.isLoggedIn === true && getLoginToken !==null? 
                     <div className='d-flex justify-content-between align-items-center px-3' style={{height : '100%'}}>
                         <div><FontAwesomeIcon icon={faListCheck} style={{color : "white", height : "2.5rem"}} onClick={()=> navigate('/home')}/></div>
                         <div className='myNavsIcon d-flex'>
