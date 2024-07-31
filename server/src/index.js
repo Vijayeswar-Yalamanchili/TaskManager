@@ -45,16 +45,20 @@ passport.use(
         try {
             let user = await GoogleAuthModel.findOne({googleId : profile.id})
             if(!user){
-                let newUser = await GoogleAuthModel.create({
+            //     let olduser = await GoogleAuthModel.findOneAndUpdate({googleId : profile.id},{$set : {isLoggedIn : true}},{new:true})
+            //     return done(null,olduser)
+            // }else{            
+                user = new GoogleAuthModel({
                     googleId : profile.id,
                     displayName : profile.displayName,
                     email : profile.emails[0].value,
                     image : profile.photos[0].value,
                     isLoggedIn : true
                 })
-            }else{
-                let oldUser = await GoogleAuthModel.findOneAndUpdate({googleId : profile.id},{$set : {isLoggedIn : true}},{new:true})
+                await user.save()
+                // return done(null,user)
             }
+            // console.log("user : ", user)
             return done(null,user)
         } catch (error) {
             return done(error,null)
@@ -62,11 +66,25 @@ passport.use(
     })
 )
 
+// passport.serializeUser((user,done)=>{
+//     done(null,user);
+// })
+
+// passport.deserializeUser((user,done)=>{
+//     done(null,user);
+// });
+
 passport.serializeUser((user,done) => {
-    done(null,user)
+    done(null,user.id)
 })
-passport.deserializeUser((user,done) => {
-    done(null,user)
+passport.deserializeUser(async (id, done) => {
+    try {
+      const user = await GoogleAuthModel.findById(id);
+      done(null, user);
+
+    } catch (error) {
+      done(error, null);
+    }
 })
 
 // initialize google oauth login
@@ -76,14 +94,35 @@ app.get('/auth/google/callback',passport.authenticate('google',{
     failureRedirect : `${process.env.CLIENT_URL}/`
 }))
 
+// function ensureAuthenticated(req, res, next) {
+//     if (req.isAuthenticated()) {
+//         console.log('first')
+//       return next();
+//     }
+//     console.log('sddscsdc')
+//     res.redirect(`${process.env.CLIENT_URL}/`);
+//   }
+
+//   app.get('/googlelogin/success', ensureAuthenticated, (req, res) => {
+//     console.log(req.user)
+//     // res.json(req.user);
+//     res.status(200).send({
+//                         message : "LogIn Successfull",
+//                         user : req.user
+//                     })
+//   });
+
 app.get('/googlelogin/success', async(req,res) => {
     try {
+        console.log("req.user : ", req.user)
         if(req?.user){
-            res.status(200).send({
-                message : "LogIn Successfull",
-                user : req?.user
-            })
-        }
+            console.log('true')
+            console.log(req.user)
+            // res.status(200).send({
+            //     message : "LogIn Successfull",
+            //     user : req?.user
+            // })
+        } else {console.log('false')}
     } catch (error) {
         res.status(500).send({
             message : "Internal server while logging with Google Account"

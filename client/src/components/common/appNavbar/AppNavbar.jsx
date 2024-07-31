@@ -42,13 +42,18 @@ function AppNavbar() {
 
     const getGoogleUserStatus = async() => {
         try {
+            // if(googleUserLoggedIn === false)
             let res = await AxiosService.get(`${ApiRoutes.GOOGLELOGIN.path}`, { withCredentials : true })
+            // let res = await AxiosService.get(`${ApiRoutes.GOOGLELOGINU.path}`,)
+            console.log(res?.data)
             if(res.status === 200){
                 setGoogleUserLoggedIn(true)
                 setGoogleUserData(res.data.user)
             }
+            // console.log(googleUserData , googleUserData?.isLoggedIn)
         } catch (error) {
-            toast.error(error.response.data.message || error.message)
+            console.log(error)
+            // toast.error(error.response.data.message || error.message)
         }
     }
 
@@ -66,7 +71,7 @@ function AppNavbar() {
             toast.error(error.response.data.message || error.message)
         }
     }
-    console.log(googleUserData , googleUserData?.isLoggedIn)
+
 
     useEffect(() => {
         getGoogleUserStatus(),
