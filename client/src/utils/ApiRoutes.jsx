@@ -26,7 +26,19 @@ const ApiRoutes = {
   CURRENTUSER : {
     path : '/users/currentuser',
     authenticate : true
-},
+  },
+  ADDPROJECT : {
+    path : '/project/addproject',
+    authenticate : true
+  },
+  GETPROJECTSLIST : {
+    path : '/project/getprojectslist',
+    authenticate : true
+  },
+  GETCURRENTPROJECTDATA : {
+    path : '/project/getcurrentprojectdata',
+    authenticate : true
+  }
 }
 
 export default ApiRoutes

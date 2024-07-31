@@ -32,6 +32,7 @@ function LoginContent() {
         }
         setLoading(false)
       } catch (error) {
+        console.log(error)
         toast.error(error.response.data.message || error.message)
         setLoading(false)
       }
@@ -68,7 +69,7 @@ function LoginContent() {
           </div>
           
           <div className="d-grid mb-2">
-            <Button className='formBtns' type='submit'disabled={loading}>{loading ? <Spinner animation="border" /> : 'Login'}</Button>
+            <Button className='formBtns' type='submit' disabled={loading}>{loading ? <Spinner animation="border" /> : 'Login'}</Button>
           </div>
           <div className='text-center mt-3'>New User? <Link to={'/register'} className='loginText'>Register</Link></div>
           <hr style={{color:"blue"}}/>

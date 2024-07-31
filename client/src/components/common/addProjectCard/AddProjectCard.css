@@ -1,0 +1,15 @@
+.cardBtns{
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.buttons{
+    width: 3rem;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.cardText{
+    flex-direction: column;
+    justify-content: space-between;
+}
