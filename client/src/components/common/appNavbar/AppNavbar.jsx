@@ -66,6 +66,7 @@ function AppNavbar() {
             toast.error(error.response.data.message || error.message)
         }
     }
+    console.log(googleUserData , googleUserData?.isLoggedIn)
 
     useEffect(() => {
         getGoogleUserStatus(),
@@ -88,6 +89,18 @@ function AppNavbar() {
                         </div>
                     </div>  
                     :
+                    googleUserData?.isLoggedIn === true ? <>
+                    <div className='d-flex justify-content-between align-items-center px-3' style={{height : '100%'}}>
+                        <div><FontAwesomeIcon icon={faListCheck} style={{color : "white", height : "2.5rem"}} onClick={()=> navigate('/home')}/></div>
+                        <div className='myNavsIcon d-flex'>
+                            {
+                                googleUserData ? <Button variant='none' className='myNavTab'><Image src={googleUserData?.image} onClick={()=>navigate('/profile')} style={{ height : '3rem', color : "white", borderRadius : "1.5rem"}}/></Button>
+                                : <Button variant='none' className='myNavTab'><FontAwesomeIcon icon={faUser} onClick={()=>navigate('/profile')} style={{ height : '1.75rem', color : "white"}}/></Button>
+                            }
+                            <Button variant='none' className='myNavTab'><FontAwesomeIcon icon={faPowerOff} onClick={handleLogout} style={{ height : '1.75rem', color : "white"}}/></Button>
+                        </div>
+                    </div>  
+                    </>:
                     <div className='d-flex justify-content-between align-items-center px-3' style={{height : '100%'}}>
                         <div><FontAwesomeIcon icon={faListCheck} style={{color : "white", height : "2.5rem"}} onClick={()=> navigate('/')}/></div>
                         <div className='myNavs d-flex'>
@@ -103,7 +116,7 @@ function AppNavbar() {
                         </div>
                     </div> 
             }
-            {
+            {/* {
                 googleUserData?.isLoggedIn === true ?
                     <div className='d-flex justify-content-between align-items-center px-3' style={{height : '100%'}}>
                         <div><FontAwesomeIcon icon={faListCheck} style={{color : "white", height : "2.5rem"}} onClick={()=> navigate('/home')}/></div>
@@ -130,7 +143,7 @@ function AppNavbar() {
                             </Button>
                         </div>
                     </div> 
-            }
+            } */}
         </div>
 
             {
