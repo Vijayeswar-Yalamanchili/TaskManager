@@ -22,14 +22,13 @@ const login = async(req,res) => {
                     if (err) return res.status(500).json({ error: 'Failed to update user login status' })
                     if(updated){
                         const loginToken = await auth.createLoginToken({
-                            id : user._id,
+                            id : user.id,
                             firstName: user.firstName,
                             lastName : user.lastName,
                             email:user.email,
                             isLoggedIn : user.isLoggedIn,
                             isAdmin : user.isAdmin
-                        })                
-                        console.log('success', user, loginToken)
+                        })
                         res.status(200).send({
                             message : "Login Successful",
                             loginToken,
@@ -85,36 +84,59 @@ const register = async(req,res) => {
 
 const forgotPassword = async(req,res) => {
     try {
-        const user = await UserAuthModel.findOne({email : req.body.email})
-        if(user){
-            req.body.password = await hash.createHash(req.body.password)
-            let resetPwd = await UserAuthModel.updateOne({password : req.body.password})
-            res.status(200).send({
-                message : "Password updated successfully",
-                resetPwd
+        const { email, password, confirmPassword } = req.body
+        if( password === confirmPassword){
+            const checkUserEmailQuery = `SELECT * FROM userauths WHERE email = ?`
+            db.query(checkUserEmailQuery,[email],async(err,result) => {
+                if(err) throw err
+                if(result.length === 0) {
+                    res.status(400).send({
+                        message : `Email not found`
+                    })
+                }
+                const user = result[0]
+                let hashedPassword = await hash.createHash(password)
+                db.query(`UPDATE userauths SET password = ? WHERE email = ?`,[hashedPassword,user.email],async(err,updated) => {
+                    if (err) return res.status(500).json({ error: 'Failed to update user password' })
+                    if(updated){
+                        res.status(200).send({
+                            message : "Password Updation Successful",
+                        })
+                    }
+                })
             })
-        }else{
+        } else {
             res.status(400).send({
-                message : `User with ${req.body.email} doesn't exists`
+                message : "Passwords doesn't match"
             })
         }
     } catch (error) {
         console.log(error)
         res.status(500).send({
-            message : "Internal server error in fetching email"
+            message : "Internal server error in updating password"
         })
     }
 }
 
 const logout = async(req,res) => {
     try {
-        const user = await UserAuthModel.findOne({_id : req.params.id})
-        if(user){
-            let logout =  await UserAuthModel.findOneAndUpdate({_id : req.params.id},{ "$set": { isLoggedIn: false }},{new : true})
-            res.status(200).send({
-                message : "Logged Out Successfully"
-            })
-        }
+        const { id } = req.params
+        const checkUserIdQuery = `SELECT * FROM userauths WHERE id = ?`
+        db.query(checkUserIdQuery,[id],async(err,result) => {            
+            if(err) throw err
+            if(result.length === 1){
+                const user = result[0]
+                db.query(`UPDATE userauths SET isLoggedIn = 0 WHERE id = ?`,[user.id],async(err,updated) => {
+                    if(err) return res.status(500).json({ error: 'Something went wrong in logging out' })
+                    if(updated){
+                        res.status(200).send({
+                            message : "Logged out Successfully"
+                        })
+                    }
+                })
+            }
+        })
+        
     } catch (error) {
         res.status(500).send({
             message : "Internal server error in logging out"
