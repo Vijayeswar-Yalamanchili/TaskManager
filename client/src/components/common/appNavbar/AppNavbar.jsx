@@ -72,7 +72,7 @@ function AppNavbar() {
 
 
     useEffect(() => {
-        getGoogleUserStatus(),
+        // getGoogleUserStatus(),
         getUserStatus()
     },[userData,googleUserData])
 
