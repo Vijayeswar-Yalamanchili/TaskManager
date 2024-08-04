@@ -1,16 +1,13 @@
-import UserAuthModel from "../models/userAuthModel.js"
 import db from '../config/db.js'
 
 const currentUser = async(req,res) => {
     try {
-        // let user = await UserAuthModel.findById({_id : req.params.id})
-        const q = 'SELECT * FROM userauths'
-        db.query(q,(err,user) => {
-            if(err){
-                res.status(400).send({
-                    message : err
-                })
-            } else {
+        const { id } = req.params
+        const checkUserIdQuery = `SELECT * FROM userauths WHERE id = ?`
+        db.query(checkUserIdQuery,[id],async(err,result) => {            
+            if(err) throw err
+            if(result.length === 1){
+                const user = result[0]
                 res.status(200).send({
                     user
                 })

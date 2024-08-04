@@ -16,7 +16,6 @@ function ProjectCardContent() {
     const getProjectData = async() => {
         try {
             let res = await AxiosService.get(`${ApiRoutes.GETCURRENTPROJECTDATA.path}/${id}`, {headers : { 'Authorization' : `${getLoginToken}` }})
-            // console.log(res.data.currentProjectData)
             if(res.status === 200){
                 setCurrentProjectCard(res.data.currentProjectData)
             }

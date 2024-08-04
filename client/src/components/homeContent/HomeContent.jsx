@@ -15,7 +15,7 @@ function HomeContent() {
   const [loading, setLoading] = useState(false)
   let getLoginToken = localStorage.getItem('loginToken')
   let decodedToken = jwtDecode(getLoginToken)
-  let tokenId = decodedToken.id
+  let userId = decodedToken.id
 
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
@@ -25,7 +25,7 @@ function HomeContent() {
     e.preventDefault()
     let datas = { projectName : projectName }
     try {      
-      let res = await AxiosService.post(`${ApiRoutes.ADDPROJECT.path}/${tokenId}`,datas, { headers : { 'Authorization' : `${getLoginToken}` } })
+      let res = await AxiosService.post(`${ApiRoutes.ADDPROJECT.path}/${userId}`,datas, { headers : { 'Authorization' : `${getLoginToken}` } })
       setLoading(false)
       handleClose()
     } catch (error) {
@@ -36,8 +36,8 @@ function HomeContent() {
 
   const getProjectsList = async() => {
     try {
-      let res = await AxiosService.get(`${ApiRoutes.GETPROJECTSLIST.path}/${tokenId}`, { headers : { 'Authorization' : `${getLoginToken}` } })
-      // console.log(res.data.list)
+      let res = await AxiosService.get(`${ApiRoutes.GETPROJECTSLIST.path}/${userId}`, { headers : { 'Authorization' : `${getLoginToken}` } })
+      console.log(res.data.list)
       if(res.status === 200){
         setProjectsList(res.data.list)
       }

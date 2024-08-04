@@ -35,12 +35,14 @@ function RegisterContent() {
             setLoading(true)
             if(values.password === values.confirmPassword){
               let res = await AxiosService.post(`${ApiRoutes.REGISTER.path}`,values)
+              console.log(res.data)
               if(res.status === 200){
                 navigate('/')
               }  
-              setLoading(false)   
+              setLoading(false)
             }else{
               toast.error("Passwords doesnt match! Please enter the same passwords")
+              setLoading(false)
             }
           } catch (error) {
               toast.error(error.response.data.message || error.message)

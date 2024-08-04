@@ -68,14 +68,12 @@ const register = async(req,res) => {
         db.query(createUserQuery,[firstName,lastName,mobile,email,hashedPassword,0,new Date()],(err,newUser) => {
             if(err) throw err
             if(newUser) {
-                res.status(201).send({
+                res.status(200).send({
                     message : "User created successfully",
-                    newUser
                 })
             }            
         })
     } catch (error) {
-        console.log(error)
         res.status(500).send({
             message : "Internal server error in fetching email"
         })
@@ -135,8 +133,7 @@ const logout = async(req,res) => {
                     }
                 })
             }
-        })
-        
+        })        
     } catch (error) {
         res.status(500).send({
             message : "Internal server error in logging out"

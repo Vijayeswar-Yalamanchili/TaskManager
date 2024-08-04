@@ -1,14 +1,17 @@
 import NewProjectModel from "../models/newProjectModel.js"
+import db from '../config/db.js'
 
 const addProject = async(req,res) => {
     try {
-        console.log(req.params, req.body)
-        let newProject = await NewProjectModel.create({
-            currentUserId : req.params.id,
-            projectName : req.body.projectName
-        })
-        res.status(200).send({
-            newProject
+        console.log(req.params.id, req.body.projectName)
+        const addProjectQuery = `INSERT INTO projects (userId,projectName,createdAt) VALUES (?,?,?)`
+        db.query(addProjectQuery,[req.params.id, req.body.projectName,new Date()], async(err,result) => {
+            if(err) throw err
+            if(result) {
+                res.status(200).send({
+                    message : "Project created successfully",
+                })
+            }  
         })
     } catch (error) {
         res.status(500).send({
@@ -19,9 +22,16 @@ const addProject = async(req,res) => {
 
 const getProjectsList = async(req,res) => {
     try {
-        let list = await NewProjectModel.find({currentUserId : req.params.id})
-        res.status(200).send({
-            list
+        const { id } = req.params
+        const checkUserIdQuery = `SELECT * FROM projects WHERE userId = ?`
+        db.query(checkUserIdQuery,[id],async(err,result) => {            
+            if(err) throw err
+            if(result){
+                const list = result
+                res.status(200).send({
+                    list
+                })
+            }
         })
     } catch (error) {
         res.status(500).send({
