@@ -22,7 +22,7 @@ const login = async(req,res) => {
                     if (err) return res.status(500).json({ error: 'Failed to update user login status' })
                     if(updated){
                         const loginToken = await auth.createLoginToken({
-                            id : user.id,
+                            id : user.userId,
                             firstName: user.firstName,
                             lastName : user.lastName,
                             email:user.email,
@@ -119,12 +119,12 @@ const forgotPassword = async(req,res) => {
 const logout = async(req,res) => {
     try {
         const { id } = req.params
-        const checkUserIdQuery = `SELECT * FROM userauths WHERE id = ?`
+        const checkUserIdQuery = `SELECT * FROM userauths WHERE userId = ?`
         db.query(checkUserIdQuery,[id],async(err,result) => {            
             if(err) throw err
             if(result.length === 1){
                 const user = result[0]
-                db.query(`UPDATE userauths SET isLoggedIn = 0 WHERE id = ?`,[user.id],async(err,updated) => {
+                db.query(`UPDATE userauths SET isLoggedIn = 0 WHERE userId = ?`,[user.id],async(err,updated) => {
                     if(err) return res.status(500).json({ error: 'Something went wrong in logging out' })
                     if(updated){
                         res.status(200).send({

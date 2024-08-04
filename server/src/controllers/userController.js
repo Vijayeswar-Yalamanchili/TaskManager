@@ -3,7 +3,7 @@ import db from '../config/db.js'
 const currentUser = async(req,res) => {
     try {
         const { id } = req.params
-        const checkUserIdQuery = `SELECT * FROM userauths WHERE id = ?`
+        const checkUserIdQuery = `SELECT * FROM userauths WHERE userId = ?`
         db.query(checkUserIdQuery,[id],async(err,result) => {            
             if(err) throw err
             if(result.length === 1){

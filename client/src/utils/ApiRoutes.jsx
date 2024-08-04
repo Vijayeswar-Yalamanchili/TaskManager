@@ -35,6 +35,10 @@ const ApiRoutes = {
     path : '/project/getprojectslist',
     authenticate : true
   },
+  GETCURRENTPROJECTCARDDATA : {
+    path : '/project/getcurrentprojectcarddata',
+    authenticate : true
+  },
   GETCURRENTPROJECTDATA : {
     path : '/project/getcurrentprojectdata',
     authenticate : true

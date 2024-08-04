@@ -37,7 +37,6 @@ function HomeContent() {
   const getProjectsList = async() => {
     try {
       let res = await AxiosService.get(`${ApiRoutes.GETPROJECTSLIST.path}/${userId}`, { headers : { 'Authorization' : `${getLoginToken}` } })
-      console.log(res.data.list)
       if(res.status === 200){
         setProjectsList(res.data.list)
       }

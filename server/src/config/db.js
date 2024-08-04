@@ -13,7 +13,7 @@ connection.connect((err) => {
 
     //Check if table created
     const newUsersTable = `CREATE TABLE IF NOT EXISTS userauths (
-        id INT AUTO_INCREMENT PRIMARY KEY,
+        userId INT AUTO_INCREMENT PRIMARY KEY,
         firstName VARCHAR(45) NOT NULL,
         lastName VARCHAR(45) NOT NULL,
         mobile VARCHAR(45) NOT NULL,
@@ -25,11 +25,11 @@ connection.connect((err) => {
     );`
     connection.query(newUsersTable,(err)=> {
         if (err) throw err
-        console.log('Users table ready...')
+        // console.log('Users table ready...')
     })
 
     const newprojectsTable = `CREATE TABLE IF NOT EXISTS projects (
-        id INT AUTO_INCREMENT PRIMARY KEY,
+        projectId INT AUTO_INCREMENT PRIMARY KEY,
         userId VARCHAR(45) NOT NULL,
         projectName VARCHAR(45) NOT NULL,
         createdAt DATE DEFAULT NULL
@@ -37,7 +37,7 @@ connection.connect((err) => {
 
     connection.query(newprojectsTable,(err)=> {
     if (err) throw err
-    console.log('Projects table ready...') 
+    // console.log('Projects table ready...') 
     })
 })
 
