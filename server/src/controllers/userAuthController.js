@@ -1,5 +1,3 @@
-import UserAuthModel from '../models/userAuthModel.js'
-import GoogleAuthModel from '../models/googleAuthModel.js'
 import auth from "../helper/auth.js"
 import hash from "../helper/hash.js"
 import db from '../config/db.js'
@@ -124,7 +122,7 @@ const logout = async(req,res) => {
             if(err) throw err
             if(result.length === 1){
                 const user = result[0]
-                db.query(`UPDATE userauths SET isLoggedIn = 0 WHERE userId = ?`,[user.id],async(err,updated) => {
+                db.query(`UPDATE userauths SET isLoggedIn = 0 WHERE userId = ?`,[user.userId],async(err,updated) => {
                     if(err) return res.status(500).json({ error: 'Something went wrong in logging out' })
                     if(updated){
                         res.status(200).send({

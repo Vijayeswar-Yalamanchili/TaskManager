@@ -1,4 +1,3 @@
-import NewProjectModel from "../models/newProjectModel.js"
 import db from '../config/db.js'
 
 const addProject = async(req,res) => {
