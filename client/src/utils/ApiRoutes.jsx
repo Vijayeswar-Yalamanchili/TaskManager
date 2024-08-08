@@ -31,6 +31,10 @@ const ApiRoutes = {
     path : '/project/addproject',
     authenticate : true
   },
+  UPDATEPROJECT : {
+    path : '/project/updatedprojectcardname',
+    authenticate : true
+  },
   GETPROJECTSLIST : {
     path : '/project/getprojectslist',
     authenticate : true
@@ -39,8 +43,8 @@ const ApiRoutes = {
     path : '/project/getcurrentprojectcarddata',
     authenticate : true
   },
-  GETCURRENTPROJECTDATA : {
-    path : '/project/getcurrentprojectdata',
+  DELETECURRENTPROJECT : {
+    path : '/project/deleteproject',
     authenticate : true
   }
 }

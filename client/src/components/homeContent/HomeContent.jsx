@@ -60,11 +60,11 @@ function HomeContent() {
       <div className='my-3 mx-3'>
         <Row xs={1} md={2} lg={3} xl={4} className="projectListArea g-4">
           {
-            memoizedProjects ? memoizedProjects.map((e,i) => {
+            memoizedProjects.length > 0 ? memoizedProjects.map((e,i) => {
               return <AddProjectCard cardData={e} key={i}/>
             }) 
             : 
-            <p className='emptyText text-center'>No Projects Created</p>
+            <p className='emptyText text-center mx-auto'>No Projects Created</p>
           }
         </Row>
       </div>

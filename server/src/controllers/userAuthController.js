@@ -68,6 +68,7 @@ const register = async(req,res) => {
             if(newUser) {
                 res.status(200).send({
                     message : "User created successfully",
+                    newUser
                 })
             }            
         })

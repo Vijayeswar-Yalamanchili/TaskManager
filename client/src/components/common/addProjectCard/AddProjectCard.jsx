@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Card, Col, Button, Modal, Form, Spinner } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -17,35 +17,41 @@ function AddProjectCard({cardData}) {
   const [loading, setLoading] = useState(false)
   const [projectName, setProjectName] = useState()
   const [cardProjectName, setCardProjectName] = useState([])
-  const [currentCardId, setCurrentCardId] = useState()
   let getLoginToken = localStorage.getItem('loginToken')
 
   const handleClose = () => setShow(false)
-  const handleShow = (cardId) => {
-    setShow(true)
-    setCurrentCardId(cardId)  
-    getCardData(cardId)  
+  const handleShow = (userId,projectId) => {
+    setShow(true) 
+    getCardData(userId,projectId)  
   }
 
-  const handleEditProjectCard = async(cardId) => {
+  const handleEditProjectCard = async(projectId) => {
+    setLoading(true)
+    let updatedDatas = { projectName : projectName }
+    try {      
+      let res = await AxiosService.put(`${ApiRoutes.UPDATEPROJECT.path}/${projectId}`,updatedDatas, { headers : { 'Authorization' : `${getLoginToken}` } })
+      handleClose()
+      setLoading(false)
+    } catch (error) {
+      toast.error(error.response.data.message || error.message)
+      setLoading(false)
+    }
+  }
+
+  const handleDeleteProjectCard = async(projectId) => {
     try {
-      console.log("cardId : "+ cardId)
+      let res = await AxiosService.delete(`${ApiRoutes.DELETECURRENTPROJECT.path}/${projectId}`, { headers : { 'Authorization' : `${getLoginToken}` } })
+      if(res.status === 200){
+        toast.success(res.data.message)
+      }
     } catch (error) {
       toast.error(error.response.data.message || error.message)
     }
   }
 
-  const handleDeleteProjectCard = async(cardId) => {
+  const getCardData = async(userId,projectId) => {
     try {
-      
-    } catch (error) {
-      toast.error(error.response.data.message || error.message)
-    }
-  }
-
-  const getCardData = async(cardId) => {
-    try {
-      let res = await AxiosService.get(`${ApiRoutes.GETCURRENTPROJECTCARDDATA.path}/${cardId}`,{ headers : { 'Authorization' : `${getLoginToken}` } })
+      let res = await AxiosService.get(`${ApiRoutes.GETCURRENTPROJECTCARDDATA.path}/${userId}/${projectId}`,{ headers : { 'Authorization' : `${getLoginToken}` } })
       setCardProjectName(res.data.list)
     } catch (error) {
       toast.error(error.response.data.message || error.message)
@@ -61,8 +67,8 @@ function AddProjectCard({cardData}) {
             <p className='mb-0' style={{fontSize : "small"}}>Created At : {formattedDateTime}</p>
           </div>
           <div className='buttons d-flex'>
-            <Button variant='secondary' onClick={() => handleShow(cardData.id)}><FontAwesomeIcon icon={faEdit}/></Button>
-            <Button variant='danger' onClick={() => handleDeleteProjectCard(cardData.id)}><FontAwesomeIcon icon={faTrash}/></Button>
+            <Button variant='secondary' onClick={() => handleShow(cardData.userId, cardData.projectId)}><FontAwesomeIcon icon={faEdit}/></Button>
+            <Button variant='danger' onClick={() => handleDeleteProjectCard(cardData.projectId)}><FontAwesomeIcon icon={faTrash}/></Button>
           </div>
         </Card.Body>
       </Card>
@@ -81,7 +87,7 @@ function AddProjectCard({cardData}) {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>Close</Button>
-          <Button variant="primary" onClick={() => handleEditProjectCard(currentCardId)} disabled={loading}>{loading ? <Spinner animation="border" /> : 'Save Changes'}</Button>
+          <Button variant="primary" onClick={() => handleEditProjectCard(cardProjectName[0]?.projectId)} disabled={loading}>{loading ? <Spinner animation="border" /> : 'Save Changes'}</Button>
         </Modal.Footer>
       </Form>
     </Modal>

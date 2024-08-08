@@ -40,9 +40,9 @@ const getProjectsList = async(req,res) => {
 
 const getCurrentProjectCardData = async(req,res) => {
     try {
-        const { id } = req.params
-        const checkUserIdQuery = `SELECT * FROM projects WHERE userId = ?`
-        db.query(checkUserIdQuery,[id],async(err,result) => {            
+        const { userId,projectId } = req.params
+        const checkUserIdQuery = `SELECT * FROM projects WHERE userId = ? AND projectId = ?`
+        db.query(checkUserIdQuery,[userId, projectId],async(err,result) => {            
             if(err) throw err
             if(result){
                 const list = result
@@ -60,7 +60,18 @@ const getCurrentProjectCardData = async(req,res) => {
 
 const updateCurrentProjectData = async(req,res) => {
     try {
-        
+        const { projectId } = req.params
+        const { projectName } = req.body 
+        const updateQuery = `UPDATE projects SET projectName = ? WHERE projectId = ?`
+        db.query(updateQuery,[projectName,projectId],async(err,result) => {            
+            if(err) throw err
+            if(result){
+                const updatedProjectName = result
+                res.status(200).send({
+                    updatedProjectName
+                })
+            }
+        })
     } catch (error) {
         res.status(500).send({
             message : "Internal server error in updating project card"
@@ -68,13 +79,20 @@ const updateCurrentProjectData = async(req,res) => {
     }
 }
 
-const getCurrentProjectData = async(req,res) => {
+const deleteCurrentProject = async(req,res) => {
     try {
-        console.log(req.query)
-        // let currentProjectData = await NewProjectModel.findById({_id : req.params.id})
-        // res.status(200).send({
-        //     currentProjectData
-        // })
+        const { projectId } = req.params
+        const deleteQuery = `DELETE FROM projects WHERE projectId = ? ;`
+        db.query(deleteQuery,[projectId],async(err,result) => {            
+            if(err) throw err
+            if(result){
+                const deletedProjectCard = result
+                res.status(200).send({
+                    message : 'Project removed successfully',
+                    deletedProjectCard
+                })
+            }
+        })
     } catch (error) {
         res.status(500).send({
             message : "Internal server error in adding a new project"
@@ -86,6 +104,6 @@ export default {
     addProject,
     getProjectsList,
     getCurrentProjectCardData,
-    getCurrentProjectData,
-    updateCurrentProjectData
+    updateCurrentProjectData,
+    deleteCurrentProject
 }
