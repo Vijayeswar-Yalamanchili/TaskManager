@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { Breadcrumb, Button, Container, Modal, Form, Spinner } from 'react-bootstrap'
+import { Breadcrumb, Button, Container, Modal, Form, Spinner, Card } from 'react-bootstrap'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { jwtDecode } from 'jwt-decode' 
@@ -16,6 +16,7 @@ function ProjectCardContent({socket}) {
     let navigate = useNavigate()
     const [show, setShow] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [tasksList, setTasksList] = useState(false)
     const [currentProjectCard, setCurrentProjectCard] = useState([])
     const getLoginToken = localStorage.getItem('loginToken')
     let decodedToken = jwtDecode(getLoginToken)
@@ -33,7 +34,6 @@ function ProjectCardContent({socket}) {
             taskStatus : taskStatus.current.value,
             projectName : currentProjectCard[0]?.projectName
         }
-        // console.log(taskData)
         try {      
             let res = await AxiosService.post(`${ApiRoutes.ADDTASK.path}/${currentProjectCard[0]?.projectId}`,taskData, { headers : { 'Authorization' : `${getLoginToken}` } })
             setLoading(false)
@@ -58,9 +58,21 @@ function ProjectCardContent({socket}) {
         }
     }
 
+    const getTasks = async() => 
+        try {
+            let res = await AxiosService.get(`${ApiRoutes.GETALLTASKS.path}/${id}`, {headers : { 'Authorization' : `${getLoginToken}` }})
+            if(res.status === 200){
+                setTasksList(res.data.list)
+            }
+        } catch (error) {
+            toast.error(error.response.data.message || error.message)
+        }
+    }
+
     useEffect(()=> {
         getProjectData()
-    },[currentProjectCard])
+        getTasks()
+    },[currentProjectCard,tasksList])
 
     return <>
         <div className='mx-5 my-4'>
@@ -69,12 +81,29 @@ function ProjectCardContent({socket}) {
                 <Breadcrumb.Item style={{textTransform : 'uppercase'}} active>{currentProjectCard[0]?.projectName}</Breadcrumb.Item>
             </Breadcrumb>
 
+            {/* ADDTASK */}
             <Container>
                 <div className='d-flex justify-content-end'>
                     <Button onClick={handleShow}>Add Task</Button>
                 </div>
             </Container>
 
+            {/* TaskColumn */}
+            <div>
+                {
+                    tasksList && tasksList.map((e,i) => {
+                        return <Card key={i}>
+                            <p>{e.projectId}</p>
+                            <p>{e.projectName}</p>
+                            <p>{e.taskTitle}</p>
+                            <p>{e.taskDescription}</p>
+                            <p>{e.taskStatus}</p>
+                            <p>{e.createdAt}</p>
+                            <p>{e.ModifiedAt}</p>
+                        </Card>
+                    })
+                }
+            </div>
         </div>
 
         <Modal show={show} onHide={handleClose}>

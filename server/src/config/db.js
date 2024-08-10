@@ -94,7 +94,8 @@ connection.connect((err) => {
         taskTitle VARCHAR(45) NOT NULL,
         taskDescription VARCHAR(255) NOT NULL,
         taskStatus VARCHAR(45) NOT NULL,
-        createdAt DATETIME DEFAULT NULL
+        createdAt DATETIME DEFAULT NULL,
+        ModifiedAt DATETIME DEFAULT NULL
     );`
 
     connection.query(newTasksTable,(err)=> {

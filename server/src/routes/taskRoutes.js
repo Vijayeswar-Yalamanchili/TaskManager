@@ -5,7 +5,7 @@ import taskController from '../controllers/taskController.js'
 const router = express.Router()
 
 router.post('/addtask/:projectId', auth.authenticate, taskController.addTask)
-// router.get('/getprojectslist/:projectId', auth.authenticate, projectController.getProjectsList)
+router.get('/getalltasks/:projectId', auth.authenticate, taskController.getTasksList)
 // router.get('/getcurrentprojectcarddata/:taskId/:projectId',auth.authenticate, projectController.getCurrentProjectCardData)
 // router.put('/updatedprojectcardname/:taskId',auth.authenticate, projectController.updateCurrentProjectData)
 // router.delete('/deleteproject/:taskId',auth.authenticate, projectController.deleteCurrentProject)

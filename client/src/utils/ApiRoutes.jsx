@@ -50,6 +50,10 @@ const ApiRoutes = {
   ADDTASK : {
     path : '/task/addtask',
     authenticate : true
+  },
+  GETALLTASKS : {
+    path : '/task/getalltasks',
+    authenticate : true
   }
 }
 
