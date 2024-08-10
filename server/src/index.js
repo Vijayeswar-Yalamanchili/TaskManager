@@ -9,7 +9,6 @@ import { Server} from 'socket.io'
 import indexRoutes from '../src/routes/indexRoutes.js'
 // import GoogleAuthModel from './models/googleAuthModel.js'
 import db from '../src/config/db.js'
-import { connected } from 'process'
 
 dotenv.config()
 // const OAuth2Strategy = GoogleStrategy.Strategy

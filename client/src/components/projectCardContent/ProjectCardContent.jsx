@@ -58,7 +58,7 @@ function ProjectCardContent({socket}) {
         }
     }
 
-    const getTasks = async() => 
+    const getTasks = async() => {
         try {
             let res = await AxiosService.get(`${ApiRoutes.GETALLTASKS.path}/${id}`, {headers : { 'Authorization' : `${getLoginToken}` }})
             if(res.status === 200){
