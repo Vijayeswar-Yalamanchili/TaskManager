@@ -41,7 +41,8 @@ function HomeContent() {
         setProjectsList(res.data.list)
       }
     } catch (error) {
-      toast.error(error.response.data.message || error.message)
+      console.log(error.message)
+      // toast.error(error.response.data.message || error.message)
     }
   }
 
@@ -73,7 +74,7 @@ function HomeContent() {
     <Modal show={show} onHide={handleClose}>
       <Form onSubmit={handleAddProject}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Add New Project</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">

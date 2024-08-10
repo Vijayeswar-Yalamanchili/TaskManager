@@ -2,8 +2,8 @@ import db from '../config/db.js'
 
 const addProject = async(req,res) => {
     try {
-        const addProjectQuery = `INSERT INTO projects (userId,projectName,createdAt) VALUES (?,?,?)`
-        db.query(addProjectQuery,[req.params.id, req.body.projectName,new Date()], async(err,result) => {
+        const addProjectQuery = `INSERT INTO projects (userId,projectName,tasks,createdAt) VALUES (?,?,?,?)`
+        db.query(addProjectQuery,[req.params.id, req.body.projectName,'[]',new Date()], async(err,result) => {
             if(err) throw err
             if(result) {
                 res.status(200).send({

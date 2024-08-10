@@ -1,12 +1,15 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
+import http from 'http'
+import { Server} from 'socket.io'
 // import session from 'express-session'
 // import passport from 'passport'
 // import GoogleStrategy from 'passport-google-oauth2'
 import indexRoutes from '../src/routes/indexRoutes.js'
 // import GoogleAuthModel from './models/googleAuthModel.js'
 import db from '../src/config/db.js'
+import { connected } from 'process'
 
 dotenv.config()
 // const OAuth2Strategy = GoogleStrategy.Strategy
@@ -24,6 +27,16 @@ app.use(cors({
 }));
 app.use(express.json())
 app.use(indexRoutes)
+const server = http.createServer(app)
+const io = new Server(server, {
+    cors : {
+        origin : 'http://localhost:5173'
+    }
+})
+
+io.on('connection', (socket) => {
+    console.log('user connected with Socket')
+})
 
 // Oauth/passport middlewares setup
 // app.use(session({
@@ -124,5 +137,5 @@ app.use(indexRoutes)
 //     })    
 // })
 
-app.listen(port, ()=> console.log(`App listening to ${port}`))
+server.listen(port, ()=> console.log(`App listening to ${port}`))
 

@@ -62,7 +62,7 @@ function AddProjectCard({cardData}) {
     <Col>
       <Card style={{width: "20rem",minHeight : "7rem"}} >
         <Card.Body className='d-flex cardDatas'>
-          <div className='cardText d-flex' onClick={() => navigate(`/home/${cardData.id}`)}>
+          <div className='cardText d-flex' onClick={() => navigate(`/home/${cardData.projectId}`)}>
             <p style={{fontSize : "large"}}>{cardData.projectName}</p>
             <p className='mb-0' style={{fontSize : "small"}}>Created At : {formattedDateTime}</p>
           </div>

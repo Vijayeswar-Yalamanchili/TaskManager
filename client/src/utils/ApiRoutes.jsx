@@ -46,6 +46,10 @@ const ApiRoutes = {
   DELETECURRENTPROJECT : {
     path : '/project/deleteproject',
     authenticate : true
+  },
+  ADDTASK : {
+    path : '/task/addtask',
+    authenticate : true
   }
 }
 
