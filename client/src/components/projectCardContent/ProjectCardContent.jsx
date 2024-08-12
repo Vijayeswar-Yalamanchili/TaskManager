@@ -5,6 +5,8 @@ import { toast } from 'react-toastify'
 import { jwtDecode } from 'jwt-decode' 
 import AxiosService from '../../utils/AxiosService'
 import ApiRoutes from '../../utils/ApiRoutes'
+import useFormattedDateTime from '../../hooks/UseFormattedDateTime'
+import { format } from 'date-fns'
 import './ProjectCardContent.css'
 
 function ProjectCardContent({socket}) {
@@ -16,7 +18,10 @@ function ProjectCardContent({socket}) {
     let navigate = useNavigate()
     const [show, setShow] = useState(false)
     const [loading, setLoading] = useState(false)
-    const [tasksList, setTasksList] = useState(false)
+    const [tasksList, setTasksList] = useState([])
+    const [todoList, setTodoList] = useState([])
+    const [pendingList, setPendingList] = useState([])
+    const [completedList, setCompletedList] = useState([])
     const [currentProjectCard, setCurrentProjectCard] = useState([])
     const getLoginToken = localStorage.getItem('loginToken')
     let decodedToken = jwtDecode(getLoginToken)
@@ -61,8 +66,15 @@ function ProjectCardContent({socket}) {
     const getTasks = async() => {
         try {
             let res = await AxiosService.get(`${ApiRoutes.GETALLTASKS.path}/${id}`, {headers : { 'Authorization' : `${getLoginToken}` }})
+            let result = res.data.list
+            let todos = result.filter((task) => task.taskStatus === "Todo" ? task : null)
+            let working = result.filter((task) => task.taskStatus === "Working" ? task : null)
+            let completed = result.filter((task) => task.taskStatus === "Done" ? task : null)
             if(res.status === 200){
-                setTasksList(res.data.list)
+                setTasksList(result)
+                setTodoList(todos)
+                setPendingList(working)
+                setCompletedList(completed)
             }
         } catch (error) {
             toast.error(error.response.data.message || error.message)
@@ -89,20 +101,59 @@ function ProjectCardContent({socket}) {
             </Container>
 
             {/* TaskColumn */}
-            <div>
-                {
-                    tasksList && tasksList.map((e,i) => {
-                        return <Card key={i}>
-                            <p>{e.projectId}</p>
-                            <p>{e.projectName}</p>
-                            <p>{e.taskTitle}</p>
-                            <p>{e.taskDescription}</p>
-                            <p>{e.taskStatus}</p>
-                            <p>{e.createdAt}</p>
-                            <p>{e.ModifiedAt}</p>
-                        </Card>
-                    })
-                }
+            <div className='d-flex flex-row justify-content-around'>
+                <div style={{backgroundColor : 'red'}}>
+                    {
+                        todoList.length > 0 && todoList.map((e,i) => {
+                            // let formattedDateTime = useFormattedDateTime(e.ModifiedAt)
+                            return <Card key={i} className='m-2'  style={{width : '22rem'}}>
+                                {/* <p>ProjectId : {e.projectId}</p>
+                                <p>ProjectName : {e.projectName}</p> */}
+                                <Card.Title className='mx-2 mt-2'>TaskTitle : {e.taskTitle}</Card.Title>
+                                <Card.Body>
+                                    <p>TaskDescription : {e.taskDescription}</p>
+                                    <p>TaskStatus : {e.taskStatus}</p>
+                                </Card.Body>
+                                <hr className='mx-3'/>
+                                <p className='px-3' style={{fontSize : 'smaller'}}>Last Updated At : {format(e.ModifiedAt, "dd/MM/yyyy")}</p>
+                            </Card>
+                        })
+                    }
+                </div>
+                <div style={{backgroundColor : 'green'}}>
+                    {
+                        pendingList.length > 0 && pendingList.map((e,i) => {
+                            return <Card key={i} className='m-2'  style={{width : '22rem'}}>
+                                {/* <p>ProjectId : {e.projectId}</p>
+                                <p>ProjectName : {e.projectName}</p> */}
+                                <Card.Title className='mx-2 mt-2'>TaskTitle : {e.taskTitle}</Card.Title>
+                                <Card.Body>
+                                    <p>TaskDescription : {e.taskDescription}</p>
+                                    <p>TaskStatus : {e.taskStatus}</p>
+                                </Card.Body>
+                                <hr className='mx-3'/>
+                                <p className='px-3' style={{fontSize : 'smaller'}}>Last Updated At : {format(e.ModifiedAt, "dd/MM/yyyy")}</p>
+                            </Card>
+                        })
+                    }
+                </div>
+                <div style={{backgroundColor : 'blue'}}>
+                    {
+                        completedList.length > 0 && completedList.map((e,i) => {
+                            return <Card key={i} className='m-2'  style={{width : '22rem'}}>
+                                {/* <p>ProjectId : {e.projectId}</p>
+                                <p>ProjectName : {e.projectName}</p> */}
+                                <Card.Title className='mx-2 mt-2'>TaskTitle : {e.taskTitle}</Card.Title>
+                                <Card.Body>
+                                    <p>TaskDescription : {e.taskDescription}</p>
+                                    <p>TaskStatus : {e.taskStatus}</p>
+                                </Card.Body>
+                                <hr className='mx-3'/>
+                                <p className='px-3' style={{fontSize : 'smaller'}}>Last Updated At : {format(e.ModifiedAt, "dd/MM/yyyy")}</p>
+                            </Card>
+                        })
+                    }
+                </div>
             </div>
         </div>
 
