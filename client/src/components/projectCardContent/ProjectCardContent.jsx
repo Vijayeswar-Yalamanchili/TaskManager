@@ -2,10 +2,10 @@ import React, { useEffect, useState, useRef } from 'react'
 import { Breadcrumb, Button, Container, Modal, Form, Spinner, Card } from 'react-bootstrap'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { jwtDecode } from 'jwt-decode' 
+import { jwtDecode } from 'jwt-decode'
+import { DragDropContext,Draggable,Droppable } from 'react-beautiful-dnd'
 import AxiosService from '../../utils/AxiosService'
 import ApiRoutes from '../../utils/ApiRoutes'
-import useFormattedDateTime from '../../hooks/UseFormattedDateTime'
 import { format } from 'date-fns'
 import './ProjectCardContent.css'
 
@@ -27,17 +27,72 @@ function ProjectCardContent({socket}) {
     let decodedToken = jwtDecode(getLoginToken)
     let userId = decodedToken.id
 
+    
+
     const handleClose = () => setShow(false)
     const handleShow = () => setShow(true)
 
+    // let tasks = {
+    //     pending: {
+    //       title: "pending",
+    //       items: [
+    //         {
+    //           id: UID(),
+    //           title: "Send the Figma file to Dima",
+    //           comments: [],
+    //         },
+    //       ],
+    //     },
+    //     ongoing: {
+    //       title: "ongoing",
+    //       items: [
+    //         {
+    //           id: UID(),
+    //           title: "Review GitHub issues",
+    //           comments: [
+    //             {
+    //               name: "David",
+    //               text: "Ensure you review before merging",
+    //               id: UID(),
+    //             },
+    //           ],
+    //         },
+    //       ],
+    //     },
+    //     completed: {
+    //       title: "completed",
+    //       items: [
+    //         {
+    //           id: UID(),
+    //           title: "Create technical contents",
+    //           comments: [
+    //             {
+    //               name: "Dima",
+    //               text: "Make sure you check the requirements",
+    //               id: UID(),
+    //             },
+    //           ],
+    //         },
+    //       ],
+    //     },
+    //   };
+
     const handleAddTask = async(e) => {
         setLoading(true)
-        e.preventDefault()
+        e.preventDefault()   
+        const UID = () => Math.random().toString(36).substring(2, 10);     
         let taskData = { 
-            taskTitle : taskTitle.current.value,
-            taskDescription : taskDescription.current.value,
-            taskStatus : taskStatus.current.value,
-            projectName : currentProjectCard[0]?.projectName
+            task: {
+                taskStatus: taskStatus.current.value,
+                taskDetails: [
+                  {
+                    id: UID(),
+                    taskTitle : taskTitle.current.value.trim(),
+                    taskDescription : taskDescription.current.value.trim(),
+                    projectName : currentProjectCard[0]?.projectName                    
+                  },
+                ],
+              }
         }
         try {      
             let res = await AxiosService.post(`${ApiRoutes.ADDTASK.path}/${currentProjectCard[0]?.projectId}`,taskData, { headers : { 'Authorization' : `${getLoginToken}` } })
@@ -63,14 +118,15 @@ function ProjectCardContent({socket}) {
         }
     }
 
-    const getTasks = async() => {
+    const getAllTasks = async() => {
         try {
             let res = await AxiosService.get(`${ApiRoutes.GETALLTASKS.path}/${id}`, {headers : { 'Authorization' : `${getLoginToken}` }})
             let result = res.data.list
-            let todos = result.filter((task) => task.taskStatus === "Todo" ? task : null)
-            let working = result.filter((task) => task.taskStatus === "Working" ? task : null)
-            let completed = result.filter((task) => task.taskStatus === "Done" ? task : null)
+            let todos = result.filter((task) => task.taskStatus === "Pending" ? task : null)
+            let working = result.filter((task) => task.taskStatus === "Ongoing" ? task : null)
+            let completed = result.filter((task) => task.taskStatus === "Completed" ? task : null)
             if(res.status === 200){
+                // console.log(result)
                 setTasksList(result)
                 setTodoList(todos)
                 setPendingList(working)
@@ -81,10 +137,22 @@ function ProjectCardContent({socket}) {
         }
     }
 
+    const handleDragEnd = async({ destination, source }) => {
+        console.log('source : ', source, 'destination : ',destination)
+        if (!destination) return;
+        if (destination.index === source.index && destination.droppableId === source.droppableId)
+        return;
+
+        socket.emit("taskDragged", {
+            source,
+            destination,
+        });
+    }
+
     useEffect(()=> {
         getProjectData()
-        getTasks()
-    },[currentProjectCard,tasksList])
+        getAllTasks()
+    },[currentProjectCard])
 
     return <>
         <div className='mx-5 my-4'>
@@ -102,58 +170,55 @@ function ProjectCardContent({socket}) {
 
             {/* TaskColumn */}
             <div className='d-flex flex-row justify-content-around'>
-                <div style={{backgroundColor : 'red'}}>
+                <DragDropContext onDragEnd={handleDragEnd}>
+                    {/* <div className={`${e.taskStatus}_wrapper`}> */}
                     {
-                        todoList.length > 0 && todoList.map((e,i) => {
-                            // let formattedDateTime = useFormattedDateTime(e.ModifiedAt)
-                            return <Card key={i} className='m-2'  style={{width : '22rem'}}>
-                                {/* <p>ProjectId : {e.projectId}</p>
-                                <p>ProjectName : {e.projectName}</p> */}
-                                <Card.Title className='mx-2 mt-2'>TaskTitle : {e.taskTitle}</Card.Title>
-                                <Card.Body>
-                                    <p>TaskDescription : {e.taskDescription}</p>
-                                    <p>TaskStatus : {e.taskStatus}</p>
-                                </Card.Body>
-                                <hr className='mx-3'/>
-                                <p className='px-3' style={{fontSize : 'smaller'}}>Last Updated At : {format(e.ModifiedAt, "dd/MM/yyyy")}</p>
-                            </Card>
+                        Object.entries(tasksList).map((task,i) => {
+                            return <div className={`${task[1].taskStatus.toLowerCase()}_wrapper`} key={i}>
+                                <h3>{task[1].taskStatus} tasks</h3>
+                                <div className={`${task[1].taskStatus.toLowerCase()}_container`}>
+                                    <Droppable droppableId={task[1].taskStatus}>
+                                        {
+                                            (provided) => (
+                                                <div ref={provided.innerRef} {...provided.droppableProps}>
+                                                    {
+                                                        task[1].taskDetails.map((detail,i) => (
+                                                            <Draggable key={detail.id} draggableId={detail.id} index={i}>
+                                                                {(provided) => (
+                                                                    <Card className={`${task[1].taskStatus.toLowerCase()}_items`} ref={provided.innerRef}{...provided.draggableProps}{...provided.dragHandleProps}>
+                                                                        <Card.Title className='mx-2 mt-2'>Title : {detail.taskTitle}</Card.Title>
+                                                                        <Card.Body>
+                                                                            <p>Description : {detail.taskDescription}</p>
+                                                                            <p className='mb-1'>Status : {task[1].taskStatus}</p>
+                                                                        </Card.Body>
+                                                                        <hr className='mx-3'/>
+                                                                        <p className='px-3 mb-1' style={{fontSize : 'smaller'}}>Last Updated At : {format(task[1].ModifiedAt, "dd/MM/yyyy")}</p>
+                                                                    </Card>
+                                                                )}
+                                                            </Draggable>
+                                                        ))
+                                                    }
+                                                    {provided.placeholder}
+                                                </div>
+                                            )
+                                        }
+                                    </Droppable>
+                                </div>
+                                {/* <Card key={i} className='m-2'  style={{width : '22rem'}}>
+                                    <Card.Title className='mx-2 mt-2'>TaskTitle : {task[1].taskDetails[0].taskTitle}</Card.Title>
+                                    <Card.Body>
+                                        <p>TaskDescription : {task[1].taskDetails[0].taskDescription}</p>
+                                        <p>TaskStatus : {task[1].taskStatus}</p>
+                                    </Card.Body>
+                                    <hr className='mx-3'/>
+                                    <p className='px-3' style={{fontSize : 'smaller'}}>Last Updated At : {format(task[1].ModifiedAt, "dd/MM/yyyy")}</p>
+                                </Card> */}
+                            </div>
                         })
                     }
-                </div>
-                <div style={{backgroundColor : 'green'}}>
-                    {
-                        pendingList.length > 0 && pendingList.map((e,i) => {
-                            return <Card key={i} className='m-2'  style={{width : '22rem'}}>
-                                {/* <p>ProjectId : {e.projectId}</p>
-                                <p>ProjectName : {e.projectName}</p> */}
-                                <Card.Title className='mx-2 mt-2'>TaskTitle : {e.taskTitle}</Card.Title>
-                                <Card.Body>
-                                    <p>TaskDescription : {e.taskDescription}</p>
-                                    <p>TaskStatus : {e.taskStatus}</p>
-                                </Card.Body>
-                                <hr className='mx-3'/>
-                                <p className='px-3' style={{fontSize : 'smaller'}}>Last Updated At : {format(e.ModifiedAt, "dd/MM/yyyy")}</p>
-                            </Card>
-                        })
-                    }
-                </div>
-                <div style={{backgroundColor : 'blue'}}>
-                    {
-                        completedList.length > 0 && completedList.map((e,i) => {
-                            return <Card key={i} className='m-2'  style={{width : '22rem'}}>
-                                {/* <p>ProjectId : {e.projectId}</p>
-                                <p>ProjectName : {e.projectName}</p> */}
-                                <Card.Title className='mx-2 mt-2'>TaskTitle : {e.taskTitle}</Card.Title>
-                                <Card.Body>
-                                    <p>TaskDescription : {e.taskDescription}</p>
-                                    <p>TaskStatus : {e.taskStatus}</p>
-                                </Card.Body>
-                                <hr className='mx-3'/>
-                                <p className='px-3' style={{fontSize : 'smaller'}}>Last Updated At : {format(e.ModifiedAt, "dd/MM/yyyy")}</p>
-                            </Card>
-                        })
-                    }
-                </div>
+                    
+                    {/* </div> */}
+                </DragDropContext>
             </div>
         </div>
 
@@ -165,7 +230,7 @@ function ProjectCardContent({socket}) {
                 <Modal.Body>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                         <Form.Label>Task Title</Form.Label>
-                        <Form.Control type="text" placeholder="Enter here" name='taskName' ref={taskTitle}/>
+                        <Form.Control style={{textTransform : 'capitalize'}} type="text" placeholder="Enter here" name='taskName' ref={taskTitle}/>
                     </Form.Group>   
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                         <Form.Label>Task Description</Form.Label>
@@ -175,9 +240,9 @@ function ProjectCardContent({socket}) {
                         <Form.Label>Task Status</Form.Label>
                         <Form.Select  ref={taskStatus} onChange={()=> taskStatus.current.value}>
                             <option>Select task status</option>
-                            <option value="Todo">Todo</option>
-                            <option value="Working">Working</option>
-                            <option value="Done">Done</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Ongoing">Ongoing</option>
+                            <option value="Completed">Completed</option>
                         </Form.Select> 
                     </Form.Group>                           
                 </Modal.Body>
@@ -191,3 +256,58 @@ function ProjectCardContent({socket}) {
 }
 
 export default ProjectCardContent
+
+{/* 
+<div style={{backgroundColor : 'red'}}>
+    {
+        todoList.length > 0 && todoList.map((e,i) => {
+            let formattedDateTime = useFormattedDateTime(e.ModifiedAt)
+            return <Card key={i} className='m-2'  style={{width : '22rem'}}>
+                <p>ProjectId : {e.projectId}</p>
+                <p>ProjectName : {e.projectName}</p>
+                <Card.Title className='mx-2 mt-2'>TaskTitle : {e.taskTitle}</Card.Title>
+                <Card.Body>
+                    <p>TaskDescription : {e.taskDescription}</p>
+                    <p>TaskStatus : {e.taskStatus}</p>
+                </Card.Body>
+                <hr className='mx-3'/>
+                <p className='px-3' style={{fontSize : 'smaller'}}>Last Updated At : {format(e.ModifiedAt, "dd/MM/yyyy")}</p>
+            </Card>
+        })
+    }
+</div>
+<div style={{backgroundColor : 'green'}}>
+    {
+        pendingList.length > 0 && pendingList.map((e,i) => {
+            return <Card key={i} className='m-2'  style={{width : '22rem'}}>
+                <p>ProjectId : {e.projectId}</p>
+                <p>ProjectName : {e.projectName}</p>
+                <Card.Title className='mx-2 mt-2'>TaskTitle : {e.taskTitle}</Card.Title>
+                <Card.Body>
+                    <p>TaskDescription : {e.taskDescription}</p>
+                    <p>TaskStatus : {e.taskStatus}</p>
+                </Card.Body>
+                <hr className='mx-3'/>
+                <p className='px-3' style={{fontSize : 'smaller'}}>Last Updated At : {format(e.ModifiedAt, "dd/MM/yyyy")}</p>
+            </Card>
+        })
+    }
+</div>
+<div style={{backgroundColor : 'blue'}}>
+    {
+        completedList.length > 0 && completedList.map((e,i) => {
+            return <Card key={i} className='m-2'  style={{width : '22rem'}}>
+                <p>ProjectId : {e.projectId}</p>
+                <p>ProjectName : {e.projectName}</p>
+                <Card.Title className='mx-2 mt-2'>TaskTitle : {e.taskTitle}</Card.Title>
+                <Card.Body>
+                    <p>TaskDescription : {e.taskDescription}</p>
+                    <p>TaskStatus : {e.taskStatus}</p>
+                </Card.Body>
+                <hr className='mx-3'/>
+                <p className='px-3' style={{fontSize : 'smaller'}}>Last Updated At : {format(e.ModifiedAt, "dd/MM/yyyy")}</p>
+            </Card>
+        })
+    }
+</div>
+*/}

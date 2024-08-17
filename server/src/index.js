@@ -35,7 +35,35 @@ const io = new Server(server, {
 })
 
 io.on('connection', (socket) => {
-    console.log('user connected with Socket')
+    console.log(`An User with Id :${socket.id} connected using Socket`)
+
+    // socket.on("taskDragged", (data) => { console.log(data) })
+    // socket.on("taskDragged", (data) => {
+    //     const { source, destination } = data;
+    //     const itemMoved = {
+    //       ...tasks[source.droppableId].items[source.index],
+    //     };
+    //     // console.log("ItemMoved>>> ", itemMoved);
+    //     tasks[source.droppableId].items.splice(source.index, 1);
+    //     tasks[destination.droppableId].items.splice(
+    //       destination.index,
+    //       0,
+    //       itemMoved
+    //     );
+    //     // console.log("Source >>>", tasks[source.droppableId].items);
+    //     // console.log("Destination >>>", tasks[destination.droppableId].items);
+    //     io.sockets.emit("tasks", tasks);
+    
+    //     /* 👇🏻 Print the items at the Source and Destination
+    //     console.log("Source >>>", tasks[source.droppableId].items);
+    //     console.log("Destination >>>", tasks[destination.droppableId].items);
+    //      */
+    //   });
+    
+      socket.on("disconnect", () => {
+        socket.disconnect();
+        console.log("🔥: A user disconnected");
+      });
 })
 
 // Oauth/passport middlewares setup

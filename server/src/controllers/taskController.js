@@ -2,9 +2,11 @@ import db from '../config/db.js'
 
 const addTask = async(req,res) => {
     try {
-        const {taskTitle,taskDescription,taskStatus,projectName} = req.body
-        const addTaskQuery = `INSERT INTO tasks (projectId,projectName,taskTitle,taskDescription,taskStatus,createdAt,ModifiedAt) VALUES (?,?,?,?,?,?,?)`
-        db.query(addTaskQuery,[req.params.projectId,projectName,taskTitle,taskDescription,taskStatus,new Date(),new Date()], async(err,result) => {
+        const {task} = req.body
+        const taskStatus = task.taskStatus;
+        const taskDetails = JSON.stringify(task.taskDetails);
+        const addTaskQuery = `INSERT INTO tasks (projectId,taskStatus,taskDetails,createdAt,ModifiedAt) VALUES (?,?,?,?,?)`
+        db.query(addTaskQuery,[req.params.projectId,taskStatus,taskDetails,new Date(),new Date()], async(err,result) => {
             if(err) throw err
             if(result) {
                 res.status(200).send({

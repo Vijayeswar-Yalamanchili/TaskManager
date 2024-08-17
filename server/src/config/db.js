@@ -90,17 +90,15 @@ connection.connect((err) => {
     const newTasksTable = `CREATE TABLE IF NOT EXISTS tasks (
         taskId INT AUTO_INCREMENT PRIMARY KEY,
         projectId VARCHAR(45) NOT NULL,
-        projectName VARCHAR(45) NOT NULL,
-        taskTitle VARCHAR(45) NOT NULL,
-        taskDescription VARCHAR(255) NOT NULL,
         taskStatus VARCHAR(45) NOT NULL,
+        taskDetails json NOT NULL,
         createdAt DATETIME DEFAULT NULL,
         ModifiedAt DATETIME DEFAULT NULL
     );`
 
     connection.query(newTasksTable,(err)=> {
     if (err) throw err
-    // console.log('Tasks table ready...') 
+    // console.log('Tasks table ready...')
     })
 })
 
