@@ -167,7 +167,7 @@ function ProjectCardContent() {
 
             {/* TaskColumn */}
             <div className='mt-3'>                
-                <Board/>
+                <Board tasksList={tasksList}/>
             </div>
             
         </div>
