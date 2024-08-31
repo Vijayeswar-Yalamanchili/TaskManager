@@ -8,8 +8,9 @@ import AxiosService from '../../utils/AxiosService'
 import ApiRoutes from '../../utils/ApiRoutes'
 import { format } from 'date-fns'
 import './ProjectCardContent.css'
+import Board from '../kanbanBoard/Board'
 
-function ProjectCardContent({socket}) {
+function ProjectCardContent() {
 
     let { id } = useParams()
     let taskTitle = useRef()
@@ -25,9 +26,7 @@ function ProjectCardContent({socket}) {
     const [currentProjectCard, setCurrentProjectCard] = useState([])
     const getLoginToken = localStorage.getItem('loginToken')
     let decodedToken = jwtDecode(getLoginToken)
-    let userId = decodedToken.id
-
-    
+    let userId = decodedToken.id    
 
     const handleClose = () => setShow(false)
     const handleShow = () => setShow(true)
@@ -86,7 +85,7 @@ function ProjectCardContent({socket}) {
                 taskStatus: taskStatus.current.value,
                 taskDetails: [
                   {
-                    id: UID(),
+                    UID: UID(),
                     taskTitle : taskTitle.current.value.trim(),
                     taskDescription : taskDescription.current.value.trim(),
                     projectName : currentProjectCard[0]?.projectName                    
@@ -143,10 +142,7 @@ function ProjectCardContent({socket}) {
         if (destination.index === source.index && destination.droppableId === source.droppableId)
         return;
 
-        socket.emit("taskDragged", {
-            source,
-            destination,
-        });
+        
     }
 
     useEffect(()=> {
@@ -162,64 +158,18 @@ function ProjectCardContent({socket}) {
             </Breadcrumb>
 
             {/* ADDTASK */}
-            <Container>
-                <div className='d-flex justify-content-end'>
+            {/* <Container> */}
+                <div className='d-flex justify-content-between'>
+                    <h3>Progress Board</h3>
                     <Button onClick={handleShow}>Add Task</Button>
                 </div>
-            </Container>
+            {/* </Container> */}
 
             {/* TaskColumn */}
-            <div className='d-flex flex-row justify-content-around'>
-                <DragDropContext onDragEnd={handleDragEnd}>
-                    {/* <div className={`${e.taskStatus}_wrapper`}> */}
-                    {
-                        Object.entries(tasksList).map((task,i) => {
-                            return <div className={`${task[1].taskStatus.toLowerCase()}_wrapper`} key={i}>
-                                <h3>{task[1].taskStatus} tasks</h3>
-                                <div className={`${task[1].taskStatus.toLowerCase()}_container`}>
-                                    <Droppable droppableId={task[1].taskStatus}>
-                                        {
-                                            (provided) => (
-                                                <div ref={provided.innerRef} {...provided.droppableProps}>
-                                                    {
-                                                        task[1].taskDetails.map((detail,i) => (
-                                                            <Draggable key={detail.id} draggableId={detail.id} index={i}>
-                                                                {(provided) => (
-                                                                    <Card className={`${task[1].taskStatus.toLowerCase()}_items`} ref={provided.innerRef}{...provided.draggableProps}{...provided.dragHandleProps}>
-                                                                        <Card.Title className='mx-2 mt-2'>Title : {detail.taskTitle}</Card.Title>
-                                                                        <Card.Body>
-                                                                            <p>Description : {detail.taskDescription}</p>
-                                                                            <p className='mb-1'>Status : {task[1].taskStatus}</p>
-                                                                        </Card.Body>
-                                                                        <hr className='mx-3'/>
-                                                                        <p className='px-3 mb-1' style={{fontSize : 'smaller'}}>Last Updated At : {format(task[1].ModifiedAt, "dd/MM/yyyy")}</p>
-                                                                    </Card>
-                                                                )}
-                                                            </Draggable>
-                                                        ))
-                                                    }
-                                                    {provided.placeholder}
-                                                </div>
-                                            )
-                                        }
-                                    </Droppable>
-                                </div>
-                                {/* <Card key={i} className='m-2'  style={{width : '22rem'}}>
-                                    <Card.Title className='mx-2 mt-2'>TaskTitle : {task[1].taskDetails[0].taskTitle}</Card.Title>
-                                    <Card.Body>
-                                        <p>TaskDescription : {task[1].taskDetails[0].taskDescription}</p>
-                                        <p>TaskStatus : {task[1].taskStatus}</p>
-                                    </Card.Body>
-                                    <hr className='mx-3'/>
-                                    <p className='px-3' style={{fontSize : 'smaller'}}>Last Updated At : {format(task[1].ModifiedAt, "dd/MM/yyyy")}</p>
-                                </Card> */}
-                            </div>
-                        })
-                    }
-                    
-                    {/* </div> */}
-                </DragDropContext>
+            <div className='mt-3'>                
+                <Board/>
             </div>
+            
         </div>
 
         <Modal show={show} onHide={handleClose}>
@@ -239,7 +189,7 @@ function ProjectCardContent({socket}) {
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                         <Form.Label>Task Status</Form.Label>
                         <Form.Select  ref={taskStatus} onChange={()=> taskStatus.current.value}>
-                            <option>Select task status</option>
+                            <option value = "-">Select task status</option>
                             <option value="Pending">Pending</option>
                             <option value="Ongoing">Ongoing</option>
                             <option value="Completed">Completed</option>

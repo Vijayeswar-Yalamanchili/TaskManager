@@ -1,8 +1,8 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
-import http from 'http'
-import { Server} from 'socket.io'
+// import http from 'http'
+// import { Server} from 'socket.io'
 // import session from 'express-session'
 // import passport from 'passport'
 // import GoogleStrategy from 'passport-google-oauth2'
@@ -26,45 +26,45 @@ app.use(cors({
 }));
 app.use(express.json())
 app.use(indexRoutes)
-const server = http.createServer(app)
-const io = new Server(server, {
-    cors : {
-        // origin : process.env.CLIENT_URL,
-        origin : 'http://localhost:5173'
-    }
-})
+// const server = http.createServer(app)
+// const io = new Server(server, {
+//     cors : {
+//         // origin : process.env.CLIENT_URL,
+//         origin : 'http://localhost:5173'
+//     }
+// })
 
-io.on('connection', (socket) => {
-    console.log(`An User with Id :${socket.id} connected using Socket`)
+// io.on('connection', (socket) => {
+//     console.log(`An User with Id :${socket.id} connected using Socket`)
 
-    // socket.on("taskDragged", (data) => { console.log(data) })
-    // socket.on("taskDragged", (data) => {
-    //     const { source, destination } = data;
-    //     const itemMoved = {
-    //       ...tasks[source.droppableId].items[source.index],
-    //     };
-    //     // console.log("ItemMoved>>> ", itemMoved);
-    //     tasks[source.droppableId].items.splice(source.index, 1);
-    //     tasks[destination.droppableId].items.splice(
-    //       destination.index,
-    //       0,
-    //       itemMoved
-    //     );
-    //     // console.log("Source >>>", tasks[source.droppableId].items);
-    //     // console.log("Destination >>>", tasks[destination.droppableId].items);
-    //     io.sockets.emit("tasks", tasks);
+//     // socket.on("taskDragged", (data) => { console.log(data) })
+//     // socket.on("taskDragged", (data) => {
+//     //     const { source, destination } = data;
+//     //     const itemMoved = {
+//     //       ...tasks[source.droppableId].items[source.index],
+//     //     };
+//     //     // console.log("ItemMoved>>> ", itemMoved);
+//     //     tasks[source.droppableId].items.splice(source.index, 1);
+//     //     tasks[destination.droppableId].items.splice(
+//     //       destination.index,
+//     //       0,
+//     //       itemMoved
+//     //     );
+//     //     // console.log("Source >>>", tasks[source.droppableId].items);
+//     //     // console.log("Destination >>>", tasks[destination.droppableId].items);
+//     //     io.sockets.emit("tasks", tasks);
     
-    //     /* 👇🏻 Print the items at the Source and Destination
-    //     console.log("Source >>>", tasks[source.droppableId].items);
-    //     console.log("Destination >>>", tasks[destination.droppableId].items);
-    //      */
-    //   });
+//     //     /* 👇🏻 Print the items at the Source and Destination
+//     //     console.log("Source >>>", tasks[source.droppableId].items);
+//     //     console.log("Destination >>>", tasks[destination.droppableId].items);
+//     //      */
+//     //   });
     
-      socket.on("disconnect", () => {
-        socket.disconnect();
-        console.log("🔥: A user disconnected");
-      });
-})
+//       socket.on("disconnect", () => {
+//         socket.disconnect();
+//         console.log("🔥: A user disconnected");
+//       });
+// })
 
 // Oauth/passport middlewares setup
 // app.use(session({
@@ -165,5 +165,5 @@ io.on('connection', (socket) => {
 //     })    
 // })
 
-server.listen(port, ()=> console.log(`App listening to ${port}`))
+app.listen(port, ()=> console.log(`App listening to ${port}`))
 
