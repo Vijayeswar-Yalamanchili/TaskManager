@@ -20,9 +20,8 @@ function AddProjectCard({cardData}) {
   let getLoginToken = localStorage.getItem('loginToken')
 
   const handleClose = () => setShow(false)
-  const handleShow = (userId,projectId) => {
-    setShow(true) 
-    getCardData(userId,projectId)  
+  const handleShow = (userId,projectId) => {    
+    getCardData(userId,projectId)     
   }
 
   const handleEditProjectCard = async(projectId) => {
@@ -53,6 +52,7 @@ function AddProjectCard({cardData}) {
     try {
       let res = await AxiosService.get(`${ApiRoutes.GETCURRENTPROJECTCARDDATA.path}/${userId}/${projectId}`,{ headers : { 'Authorization' : `${getLoginToken}` } })
       setCardProjectName(res.data.list)
+      setShow(true)
     } catch (error) {
       toast.error(error.response.data.message || error.message)
     }

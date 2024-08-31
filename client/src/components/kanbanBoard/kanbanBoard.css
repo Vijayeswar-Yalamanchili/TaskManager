@@ -1,0 +1,42 @@
+.columnContainer{
+    background-color: rgba(158, 171, 186, 0.493);
+    color: wheat;
+    border-radius: 10px;
+    width: 300px;
+    height: 475px;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    border:  1px solid grey;
+}
+
+.columnContainer::-webkit-scrollbar {
+    display: none;
+}
+
+.columnTitle {
+    padding: 8px;
+    background-color: white;
+    text-align: center;
+}
+
+.columnTaskList {
+    padding: 3px;
+    transition: rgb(147, 96, 96) 0.2s ease;
+    /* background-color: rgb(147, 96, 96); */
+    flex-grow: 1;
+    min-height: 100px;
+}
+
+.taskCardContainer{
+    /* background-color: ${(props) => bgColorChange(props)}; */
+    color: #000;
+    border-radius: 10px;
+    margin: 0.5rem 0.25rem;
+    padding: 0 8px ;
+    margin-bottom: 8px;
+    min-height: 90px;
+    cursor: pointer;
+    justify-content: space-between;
+    background-color: white;
+}
