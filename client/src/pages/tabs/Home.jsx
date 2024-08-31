@@ -8,11 +8,11 @@ function Home() {
     const getLoginToken = localStorage.getItem('loginToken')
 
     return <>
-        {/* {
+        {
             getLoginToken !== null ? <><AppNavbar/><HomeContent/></> : <ErrorScreen/> 
-        } */}
-        <AppNavbar/>
-        <HomeContent/>        
+        }
+        {/* <AppNavbar/>
+        <HomeContent/>         */}
     </>
 }
 

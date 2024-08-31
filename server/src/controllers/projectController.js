@@ -61,7 +61,7 @@ const getCurrentProjectCardData = async(req,res) => {
 const updateCurrentProjectData = async(req,res) => {
     try {
         const { projectId } = req.params
-        const { projectName } = req.body 
+        const { projectName } = req.body
         const updateQuery = `UPDATE projects SET projectName = ? WHERE projectId = ?`
         db.query(updateQuery,[projectName,projectId],async(err,result) => {            
             if(err) throw err
