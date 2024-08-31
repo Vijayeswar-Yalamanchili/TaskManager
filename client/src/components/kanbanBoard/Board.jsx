@@ -7,9 +7,11 @@ function Board({tasksList}) {
   const [completed,setCompleted] = useState([])
   const [inComplete,setInComplete] = useState([])
 
-  const handleDragEnd = async(result) => {
+  const handleDragEnd = (result) => {
     const { destination, source, draggableId} = result
-    if( source.draggableId === destination.draggableId) return;
+    if( source.droppableId === destination.droppableId) return;
+
+    console.log('source : ', source.droppableId, "& destination : " ,destination.droppableId)
   }
 
   useEffect(()=> {
