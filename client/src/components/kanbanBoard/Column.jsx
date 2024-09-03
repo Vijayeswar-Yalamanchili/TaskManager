@@ -12,10 +12,10 @@ function Column({title,tasks,id,tasksList}) {
       <Droppable droppableId={id} className='efr'>
         {
           (provided,snapshot) => {
-            return <div className='columnTaskList' ref={provided.innerRef}{...provided.droppableProps} isDraggingOver={snapshot.isDraggingOver}>
+            return <div className='columnTaskList' ref={provided.innerRef}{...provided.droppableProps} isdraggingover={snapshot.isdraggingover}>
               {
-                // tasksList.map((task,index) => {
-                tasks.map((task,index) => {
+                tasksList.map((task,index) => {
+                // tasks.map((task,index) => {
                   return <TaskCard key={index} index={index} task={task}/>
                 })
               }

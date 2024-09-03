@@ -26,7 +26,7 @@ function ProjectCardContent() {
     const [currentProjectCard, setCurrentProjectCard] = useState([])
     const getLoginToken = localStorage.getItem('loginToken')
     let decodedToken = jwtDecode(getLoginToken)
-    let userId = decodedToken.id    
+    let userId = decodedToken.id
 
     const handleClose = () => setShow(false)
     const handleShow = () => setShow(true)
@@ -134,15 +134,6 @@ function ProjectCardContent() {
         } catch (error) {
             toast.error(error.response.data.message || error.message)
         }
-    }
-
-    const handleDragEnd = async({ destination, source }) => {
-        console.log('source : ', source, 'destination : ',destination)
-        if (!destination) return;
-        if (destination.index === source.index && destination.droppableId === source.droppableId)
-        return;
-
-        
     }
 
     useEffect(()=> {
