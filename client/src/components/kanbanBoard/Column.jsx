@@ -15,9 +15,9 @@ function Column({title,tasks,id,tasksList}) {
             return <div className='columnTaskList' ref={provided.innerRef}{...provided.droppableProps} isdraggingover={snapshot.isdraggingover}>
               {
                 // tasksList.map((task,index) => {
-                tasks.length>0 && tasks.map((task,index) => {
+                tasks.length > 0 ? tasks.map((task,index) => {
                   return <TaskCard key={index} index={index} task={task}/>
-                })
+                }) : <h5 style={{zIndex:"15", color : "black", textAlign : "center", marginTop : "1rem"}}>No Tasks</h5>
               }
               {provided.placeholder}
             </div>
