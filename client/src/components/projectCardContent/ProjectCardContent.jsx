@@ -20,9 +20,9 @@ function ProjectCardContent() {
     const [show, setShow] = useState(false)
     const [loading, setLoading] = useState(false)
     const [tasksList, setTasksList] = useState([])
-    const [todoList, setTodoList] = useState([])
-    const [pendingList, setPendingList] = useState([])
-    const [completedList, setCompletedList] = useState([])
+    const [inComplete, setInComplete] = useState([])
+    const [workingTask, setWorkingTask] = useState([])
+    const [completed, setCompleted] = useState([])
     const [currentProjectCard, setCurrentProjectCard] = useState([])
     const getLoginToken = localStorage.getItem('loginToken')
     let decodedToken = jwtDecode(getLoginToken)
@@ -30,51 +30,6 @@ function ProjectCardContent() {
 
     const handleClose = () => setShow(false)
     const handleShow = () => setShow(true)
-
-    // let tasks = {
-    //     pending: {
-    //       title: "pending",
-    //       items: [
-    //         {
-    //           id: UID(),
-    //           title: "Send the Figma file to Dima",
-    //           comments: [],
-    //         },
-    //       ],
-    //     },
-    //     ongoing: {
-    //       title: "ongoing",
-    //       items: [
-    //         {
-    //           id: UID(),
-    //           title: "Review GitHub issues",
-    //           comments: [
-    //             {
-    //               name: "David",
-    //               text: "Ensure you review before merging",
-    //               id: UID(),
-    //             },
-    //           ],
-    //         },
-    //       ],
-    //     },
-    //     completed: {
-    //       title: "completed",
-    //       items: [
-    //         {
-    //           id: UID(),
-    //           title: "Create technical contents",
-    //           comments: [
-    //             {
-    //               name: "Dima",
-    //               text: "Make sure you check the requirements",
-    //               id: UID(),
-    //             },
-    //           ],
-    //         },
-    //       ],
-    //     },
-    //   };
 
     const handleAddTask = async(e) => {
         setLoading(true)
@@ -127,9 +82,9 @@ function ProjectCardContent() {
             if(res.status === 200){
                 // console.log(result)
                 setTasksList(result)
-                setTodoList(todos)
-                setPendingList(working)
-                setCompletedList(completed)
+                setInComplete(todos)
+                setWorkingTask(working)
+                setCompleted(completed)
             }
         } catch (error) {
             toast.error(error.response.data.message || error.message)
@@ -139,7 +94,7 @@ function ProjectCardContent() {
     useEffect(()=> {
         getProjectData()
         getAllTasks()
-    },[currentProjectCard])
+    },[currentProjectCard, inComplete, workingTask, completed])
 
     return <>
         <div className='mx-5 my-4'>
@@ -158,7 +113,7 @@ function ProjectCardContent() {
 
             {/* TaskColumn */}
             <div className='mt-3'>                
-                <Board tasksList={tasksList}/>
+                <Board tasksList={tasksList} inComplete={inComplete} setInComplete={setInComplete} workingTask={workingTask} setWorkingTask={setWorkingTask} completed={completed} setCompleted={setCompleted}/>
             </div>
             
         </div>

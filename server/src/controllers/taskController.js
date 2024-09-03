@@ -41,7 +41,22 @@ const getTasksList = async(req,res) => {
     }
 }
 
+const statusUpdate = async(req,res) => {
+    const { taskId } = req.params
+    const { taskStatus } = req.body
+    db.query(`UPDATE tasks SET taskStatus=? WHERE taskId=?`,[taskStatus,taskId],async(err,result) => {
+        if(err) throw err
+        if(result){
+            const updatedTaskStatus = result
+            res.status(200).send({
+                updatedTaskStatus
+            })
+        }
+    })
+}
+
 export default {
     addTask,
-    getTasksList
+    getTasksList,
+    statusUpdate
 }

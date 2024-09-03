@@ -9,13 +9,13 @@ function Column({title,tasks,id,tasksList}) {
       <div className="columnTitle" style={{backgroundColor : "blue" , position : "sticky"}}>
         {title}
       </div>
-      <Droppable droppableId={id} className='efr'>
+      <Droppable droppableId={id}>
         {
           (provided,snapshot) => {
             return <div className='columnTaskList' ref={provided.innerRef}{...provided.droppableProps} isdraggingover={snapshot.isdraggingover}>
               {
-                tasksList.map((task,index) => {
-                // tasks.map((task,index) => {
+                // tasksList.map((task,index) => {
+                tasks.length>0 && tasks.map((task,index) => {
                   return <TaskCard key={index} index={index} task={task}/>
                 })
               }

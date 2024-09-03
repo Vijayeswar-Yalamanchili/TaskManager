@@ -2,67 +2,73 @@ import React, { useEffect, useState } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
 import './kanbanBoard.css'
 import Column from './Column'
+import AxiosService from '../../utils/AxiosService'
+import ApiRoutes from '../../utils/ApiRoutes'
 
-function Board({tasksList}) {
-  const [completed,setCompleted] = useState([])
-  const [inComplete,setInComplete] = useState([])
-  const [workingTask,setWorkingTask] = useState([])
+function Board({tasksList,inComplete, setInComplete, workingTask, setWorkingTask, completed,setCompleted }) {
 
-  const tasksResult = () => {
-    try {
-      if(tasksList) {
-        // console.log(tasksList)
-        setInComplete(tasksList.filter((task) => task ? task?.taskStatus === 'Pending' : null))
-        setWorkingTask(tasksList.filter((task) => task ? task?.taskStatus === 'Ongoing' : null))
-        setCompleted(tasksList.filter((task) => task ? task?.taskStatus === 'Completed' : null))
-      }
-    } catch (error) {
-      toast.error(error.message)
-    }
-  }
-
-  useEffect(() => {
-    tasksResult()
-  },[completed, workingTask, inComplete])
-  
-  // useEffect(() => {console.log(tasksList)
-  //   tasksResult()
-  //   // fetch('https://jsonplaceholder.typicode.com/todos')
-  //   //   .then(response => response.json())
-  //   //   .then(json => {
-  //   //     // console.log(json)
-  //   //     setCompleted(json.filter((task) => task.completed))
-  //   //     setInComplete(json.filter((task) => !task.completed))
-  //   //   })
-  // },[])
+  const getLoginToken = localStorage.getItem('loginToken')
 
   const handleDragEnd = (result) => {
     const { destination, source, draggableId} = result
-    if( source.droppableId === destination.droppableId) return
+    if(!destination || source.droppableId === destination.droppableId) return
 
     // REMOVE FROM SOURCE COLUMN LIST
-    if(source.droppableId == 2) {
-      setCompleted(removeItemById(draggableId,completed))
-    } else {
-      setInComplete(removeItemById(draggableId,inComplete))
-    }
+    deletePreviousState(source.droppableId, draggableId)
 
     // GET THE ITEM FROM SOURCE TO DESTINATION LIST
     const taskItem = findItemById(draggableId,[...inComplete, ...completed, ...workingTask])
-    console.log(taskItem)
 
     // ADD ITEMS FROM SOURCE TO DESTINATION
-    if(destination.droppableId == 2) {
-      setCompleted([{...taskItem, completed : !taskItem.completed }, ... completed])
-    } else {
-      setInComplete([{...taskItem, completed : !taskItem.completed }, ... inComplete])
-    }
-    
+    setNewState(destination.droppableId, taskItem);
     // console.log('source : ', source.droppableId, "& destination : " ,destination.droppableId)
   }
 
+  const deletePreviousState = (sourceDroppableId, taskId) => {
+    switch (sourceDroppableId) {
+      case "1":
+        setInComplete(removeItemById(taskId, inComplete));
+        break;
+      case "2":
+        setWorkingTask(removeItemById(taskId, workingTask));
+        break;
+      case "3":
+        setCompleted(removeItemById(taskId, completed));
+        break;
+    }
+  }
+
+  const setNewState = async(destinationDroppableId, task) => {
+    let updatedTask;
+    switch (destinationDroppableId) {
+      case "1":   // TO DO
+        updatedTask = { ...task, taskStatus: 'Pending' };
+        console.log("updatedTask : ",updatedTask)
+        let pendingResult = await AxiosService.put(`${ApiRoutes.STATUSUPDATE.path}/${updatedTask.taskId}`, {taskStatus: 'Pending'},{ headers : { 'Authorization' : `${getLoginToken}` } })
+        setWorkingTask(pendingResult.data.updatedTaskStatus)
+        // setInComplete([updatedTask, ...inComplete]);
+        console.log("inComplete : ", inComplete)
+        break;
+      case "2":  // onGoing
+        updatedTask = { ...task, taskStatus: 'Ongoing' };
+        console.log("updatedTask : ",updatedTask)
+        let workingResult = await AxiosService.put(`${ApiRoutes.STATUSUPDATE.path}/${updatedTask.taskId}`, {taskStatus: 'Ongoing'},{ headers : { 'Authorization' : `${getLoginToken}` } })
+        setWorkingTask(workingResult.data.updatedTaskStatus)
+        // setWorkingTask([updatedTask, ...workingTask]);
+        console.log("workingTask : ", workingTask)
+        break;
+      case "3":  // DONE
+        updatedTask = { ...task, taskStatus: 'Completed' };
+        console.log("updatedTask : ",updatedTask.taskId)
+        let completedResult = await AxiosService.put(`${ApiRoutes.STATUSUPDATE.path}/${updatedTask.taskId}`, {taskStatus: 'Completed'},{ headers : { 'Authorization' : `${getLoginToken}` } })
+        setCompleted(completedResult.data.updatedTaskStatus)
+        // setCompleted([updatedTask, ...completed]);
+        console.log("completed : ", completed)
+        break;
+    }
+  }
+
   const removeItemById = (id,array) => {
-    // return array.filter((item) => console.log(item))
     return array.filter((item) => item.taskId != id)
   }
 
