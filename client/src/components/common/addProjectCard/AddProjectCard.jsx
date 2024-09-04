@@ -62,14 +62,17 @@ function AddProjectCard({cardData}) {
     <Col>
       <Card style={{width: "20rem",minHeight : "7rem"}} >
         <Card.Body className='d-flex cardDatas'>
-          <div className='cardText d-flex' onClick={() => navigate(`/home/${cardData.projectId}`)}>
-            <p style={{fontSize : "large"}}>{cardData.projectName}</p>
-            <p className='mb-0' style={{fontSize : "small"}}>Created At : {formattedDateTime}</p>
+          <div className='d-flex flex-row justify-content-between'>
+            <div className='cardText' onClick={() => navigate(`/home/${cardData.projectId}`)}>
+              <p style={{fontSize : "large"}}>{cardData.projectName}</p>            
+            </div>
+            <div className='buttons d-flex'>
+              <div className='editBtn' onClick={() => handleShow(cardData.userId, cardData.projectId)}><FontAwesomeIcon icon={faEdit}/></div>
+              <div className='deleteBtn' onClick={() => handleDeleteProjectCard(cardData.projectId)}><FontAwesomeIcon icon={faTrash}/></div>
+            </div>
           </div>
-          <div className='buttons d-flex'>
-            <Button variant='secondary' onClick={() => handleShow(cardData.userId, cardData.projectId)}><FontAwesomeIcon icon={faEdit}/></Button>
-            <Button variant='danger' onClick={() => handleDeleteProjectCard(cardData.projectId)}><FontAwesomeIcon icon={faTrash}/></Button>
-          </div>
+          <hr className='my-2'/>
+          <p className='mb-0' style={{fontSize : "small"}}>Created At : {formattedDateTime}</p>
         </Card.Body>
       </Card>
     </Col>

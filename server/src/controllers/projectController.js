@@ -2,8 +2,8 @@ import db from '../config/db.js'
 
 const addProject = async(req,res) => {
     try {
-        const addProjectQuery = `INSERT INTO projects (userId,projectName,tasks,createdAt) VALUES (?,?,?,?)`
-        db.query(addProjectQuery,[req.params.id, req.body.projectName,'[]',new Date()], async(err,result) => {
+        const addProjectQuery = `INSERT INTO projects (userId,projectName,tasks,createdAt,updatedAt) VALUES (?,?,?,?,?)`
+        db.query(addProjectQuery,[req.params.id, req.body.projectName,'[]',new Date(),new Date()], async(err,result) => {
             if(err) throw err
             if(result) {
                 res.status(200).send({
@@ -62,8 +62,8 @@ const updateCurrentProjectData = async(req,res) => {
     try {
         const { projectId } = req.params
         const { projectName } = req.body
-        const updateQuery = `UPDATE projects SET projectName = ? WHERE projectId = ?`
-        db.query(updateQuery,[projectName,projectId],async(err,result) => {            
+        const updateQuery = `UPDATE projects SET projectName = ?,updatedAt = ? WHERE projectId = ?`
+        db.query(updateQuery,[projectName,new Date(),projectId],async(err,result) => {            
             if(err) throw err
             if(result){
                 const updatedProjectName = result

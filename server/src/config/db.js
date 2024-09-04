@@ -32,7 +32,8 @@ connection.connect((err) => {
         password VARCHAR(255) NOT NULL,
         isAdmin TINYINT NOT NULL DEFAULT 0,
         isLoggedIn TINYINT NOT NULL DEFAULT 0,
-        createdAt DATETIME DEFAULT NULL
+        createdAt DATETIME DEFAULT NULL,
+        updatedAt DATETIME DEFAULT NULL
     );`
     connection.query(newUsersTable,(err)=> {
         if (err) throw err
@@ -44,7 +45,8 @@ connection.connect((err) => {
         userId VARCHAR(45) NOT NULL,
         projectName VARCHAR(45) NOT NULL,
         tasks json,
-        createdAt DATETIME DEFAULT NULL
+        createdAt DATETIME DEFAULT NULL,
+        updatedAt DATETIME DEFAULT NULL
     );`
 
     connection.query(newprojectsTable,(err)=> {
@@ -58,7 +60,7 @@ connection.connect((err) => {
         taskStatus VARCHAR(45) NOT NULL,
         taskDetails json NOT NULL,
         createdAt DATETIME DEFAULT NULL,
-        ModifiedAt DATETIME DEFAULT NULL
+        updatedAt DATETIME DEFAULT NULL
     );`
 
     connection.query(newTasksTable,(err)=> {

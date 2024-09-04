@@ -62,8 +62,8 @@ const register = async(req,res) => {
         })
         // Insert user data
         let hashedPassword = await hash.createHash(password)
-        const createUserQuery = `INSERT INTO userauths (firstName, lastName, mobile, email , password, isLoggedIn, createdAt) VALUES (?,?,?,?,?,?,?)`
-        db.query(createUserQuery,[firstName,lastName,mobile,email,hashedPassword,0,new Date()],(err,newUser) => {
+        const createUserQuery = `INSERT INTO userauths (firstName, lastName, mobile, email , password, isLoggedIn, createdAt,updatedAt) VALUES (?,?,?,?,?,?,?,?)`
+        db.query(createUserQuery,[firstName,lastName,mobile,email,hashedPassword,0,new Date(),new Date()],(err,newUser) => {
             if(err) throw err
             if(newUser) {
                 res.status(200).send({

@@ -1,16 +1,24 @@
 .cardDatas{
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
 }
 
 .buttons{
-    width: 3rem;
+    width: max-content;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 10px;
+    color: grey;
 }
 
 .cardText{
     width: 100%;
-    flex-direction: column;
-    justify-content: space-between;
+}
+
+.editBtn:hover {
+    color: rgba(135, 124, 124, 0.655);
+}
+
+.deleteBtn:hover {
+    color: rgba(255, 0, 0, 0.655);
 }

@@ -5,7 +5,7 @@ const addTask = async(req,res) => {
         const {task} = req.body
         const taskStatus = task.taskStatus;
         const taskDetails = JSON.stringify(task.taskDetails);
-        const addTaskQuery = `INSERT INTO tasks (projectId,taskStatus,taskDetails,createdAt,ModifiedAt) VALUES (?,?,?,?,?)`
+        const addTaskQuery = `INSERT INTO tasks (projectId,taskStatus,taskDetails,createdAt,updatedAt) VALUES (?,?,?,?,?)`
         db.query(addTaskQuery,[req.params.projectId,taskStatus,taskDetails,new Date(),new Date()], async(err,result) => {
             if(err) throw err
             if(result) {
