@@ -80,10 +80,10 @@ function AddProjectCard({cardData}) {
     <Modal show={show} onHide={handleClose}>
       <Form>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Edit Project Data</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+          <Form.Group className="mb-3">
             <Form.Label>Project Name</Form.Label>
             <Form.Control type="text" defaultValue={cardProjectName[0]?.projectName} placeholder="Enter here" name='projectname' onChange={(e)=> setProjectName(e.target.value)}/>
           </Form.Group>        

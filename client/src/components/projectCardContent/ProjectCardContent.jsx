@@ -46,7 +46,7 @@ function ProjectCardContent() {
                     projectName : currentProjectCard[0]?.projectName                    
                   },
                 ],
-              }
+            }
         }
         try {      
             let res = await AxiosService.post(`${ApiRoutes.ADDTASK.path}/${currentProjectCard[0]?.projectId}`,taskData, { headers : { 'Authorization' : `${getLoginToken}` } })

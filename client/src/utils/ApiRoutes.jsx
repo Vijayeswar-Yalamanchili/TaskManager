@@ -55,10 +55,18 @@ const ApiRoutes = {
     path : '/task/getalltasks',
     authenticate : true
   },
+  GETCURRENTTASKDATA : {
+    path : '/task/getcurrenttaskdata',
+    authenticate : true
+  },
   STATUSUPDATE : {
     path : '/task/statusupdate',
     authenticate : true
-  }
+  },
+  UPDATETASK : {
+    path : '/task/updatetask',
+    authenticate : true
+  },
 }
 
 export default ApiRoutes

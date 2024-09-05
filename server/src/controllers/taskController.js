@@ -55,8 +55,39 @@ const statusUpdate = async(req,res) => {
     })
 }
 
+const getCurrentTaskData = async(req,res) => {
+    const { taskId } = req.params
+    const checkTaskIdQuery = `SELECT * FROM tasks WHERE taskId = ?`
+        db.query(checkTaskIdQuery,[taskId],async(err,result) => {            
+            if(err) throw err
+            if(result){
+                const currentTask = result
+                res.status(200).send({
+                    currentTask
+                })
+            }
+        })
+}
+
+const updateTask = async(req,res) => {
+    const { taskId } = req.params
+    const { taskStatus, taskDescription, taskTitle} = req.body
+    db.query(`UPDATE tasks SET taskStatus = ?, updatedAt = ?, taskDetails = JSON_SET(taskDetails,'$[0].taskTitle' , ?,'$[0].taskDescription' , ?) WHERE taskId=?`,[taskStatus,new Date(),taskTitle,taskDescription,taskId],async(err,result) => {
+        if(err) throw err
+        if(result){
+            const updatedTaskData = result
+            res.status(200).send({
+                updatedTaskData,
+                message : "Task Updated"
+            })
+        }
+    })
+}
+
 export default {
     addTask,
     getTasksList,
-    statusUpdate
+    statusUpdate,
+    getCurrentTaskData,
+    updateTask
 }
