@@ -51,7 +51,7 @@ function LoginContent() {
   return <>
     <Container>
       <Col md xs={12}>
-        <Form onSubmit={formik.handleSubmit} className='authForm mx-auto my-5 p-5 rounded-5'>                
+        <Form onSubmit={formik.handleSubmit} className='authForm mx-auto  p-5 rounded-5' style={{marginTop : "8rem"}}>                
           <Form.Group className="mb-4">
             <Form.Label>Email</Form.Label>
             <Form.Control type="email" placeholder="Enter email" id='email' name='email' onChange={formik.handleChange} value={formik.values.email} onBlur={formik.handleBlur}/>
@@ -72,10 +72,10 @@ function LoginContent() {
             <Button className='formBtns' type='submit' disabled={loading}>{loading ? <Spinner animation="border" /> : 'Login'}</Button>
           </div>
           <div className='text-center mt-3'>New User? <Link to={'/register'} className='loginText'>Register</Link></div>
-          <hr style={{color:"blue"}}/>
+          {/* <hr style={{color:"blue"}}/>
           <div className="d-grid mt-4 mb-3">
             <Button className='formBtns' variant='danger' onClick={handleGoogleLogin}>Sign Up with Google</Button>
-          </div>
+          </div> */}
         </Form>
       </Col>
     </Container>  
