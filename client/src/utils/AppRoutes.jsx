@@ -7,6 +7,7 @@ const RegisterPage = lazy(()=> import('../pages/authentication/Register'))
 const ForgotPasswordPage = lazy(()=> import('../pages/authentication/ForgotPassword'))
 const HomePage = lazy(()=> import('../pages/tabs/Home'))
 const ProjectCardPage = lazy(() => import('../pages/tabs/ProjectCard'))
+const ProfilePage = lazy(() => import('../pages/tabs/Profile'))
 
 const AppRoutes = [
     {
@@ -32,6 +33,11 @@ const AppRoutes = [
     {
         path : '/home/:id',
         element : <Suspense fallback={<LoadingComponent/>}><><ProjectCardPage/></></Suspense>,
+        exact : true
+    },
+    {
+        path : '/profile',
+        element : <Suspense fallback={<LoadingComponent/>}><><ProfilePage/></></Suspense>,
         exact : true
     },
     {

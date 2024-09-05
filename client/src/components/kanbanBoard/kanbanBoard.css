@@ -23,7 +23,6 @@
 .columnTaskList {
     padding: 3px;
     transition: rgb(147, 96, 96) 0.2s ease;
-    /* background-color: rgb(147, 96, 96); */
     flex-grow: 1;
     min-height: 100px;
 }

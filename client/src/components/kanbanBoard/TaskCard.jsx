@@ -64,7 +64,6 @@ function TaskCard({task, index}) {
   const getTaskData = async(taskId) => {
     try {
       let res = await AxiosService.get(`${ApiRoutes.GETCURRENTTASKDATA.path}/${taskId}`,{ headers : { 'Authorization' : `${getLoginToken}` } })
-
       setTaskData(res.data.currentTask)
       setShow(true)
     } catch (error) {

@@ -53,12 +53,11 @@ function HomeContent() {
 
   return <>
     <div className='m-5'>
-      <div className='pb-5'>        
+      <div className='pb-4'>        
         <Button onClick={() => handleShow()}>Add Project</Button>
-
       </div>
-      <div className='my-3 mx-3'>
-        <Row xs={1} md={2} lg={3} xl={4} className="projectListArea g-4">
+      <div className=' projectArea m-2'>
+        <Row xs={1} md={2} lg={3} xl={4} className="projectListArea g-4 m-1">
           {
             memoizedProjects.length > 0 ? memoizedProjects.map((e,i) => {
               return <AddProjectCard cardData={e} key={i}/>

@@ -11,5 +11,6 @@ router.post('/forgotpassword',userAuthController.forgotPassword)
 router.put('/logout/:id', auth.authenticate,userAuthController.logout)
 
 router.get('/currentuser/:id',auth.authenticate,userController.currentUser)
+router.put('/updateuser/:userId', auth.authenticate,userController.updateUser)
 
 export default router

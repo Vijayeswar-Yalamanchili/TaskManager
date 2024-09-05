@@ -27,6 +27,10 @@ const ApiRoutes = {
     path : '/users/currentuser',
     authenticate : true
   },
+  UPDATEUSER : {
+    path : '/users/updateuser',
+    authenticate : true
+  },
   ADDPROJECT : {
     path : '/project/addproject',
     authenticate : true
