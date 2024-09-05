@@ -11,6 +11,4 @@ router.get('/getcurrenttaskdata/:taskId',auth.authenticate, taskController.getCu
 router.put('/updatetask/:taskId',auth.authenticate, taskController.updateTask)
 router.delete('/deletetask/:taskId',auth.authenticate, taskController.deleteTask)
 
-// router.get('/getcurrentprojectdata/:id',auth.authenticate, projectController.getCurrentProjectData)
-
 export default router

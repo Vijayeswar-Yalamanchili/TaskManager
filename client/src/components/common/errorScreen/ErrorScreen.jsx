@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button} from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 import { useNavigate } from "react-router-dom"
 import { jwtDecode } from "jwt-decode"
 import errorScreenAnime from '../../../assets/errorScreenAnime.svg'

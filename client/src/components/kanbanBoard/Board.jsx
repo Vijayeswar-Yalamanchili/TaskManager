@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
 import './kanbanBoard.css'
 import Column from './Column'
 import AxiosService from '../../utils/AxiosService'
 import ApiRoutes from '../../utils/ApiRoutes'
 
-function Board({tasksList,inComplete, setInComplete, workingTask, setWorkingTask, completed,setCompleted }) {
+function Board({inComplete, setInComplete, workingTask, setWorkingTask, completed,setCompleted }) {
 
   const getLoginToken = localStorage.getItem('loginToken')
 
@@ -41,21 +41,21 @@ function Board({tasksList,inComplete, setInComplete, workingTask, setWorkingTask
   const setNewState = async(destinationDroppableId, task) => {
     let updatedTask;
     switch (destinationDroppableId) {
-      case "1":   // TO DO
+      case "1":   // Pending
         updatedTask = { ...task, taskStatus: 'Pending' }
         let pendingResult = await AxiosService.put(`${ApiRoutes.STATUSUPDATE.path}/${updatedTask.taskId}`, {taskStatus: 'Pending'},{ headers : { 'Authorization' : `${getLoginToken}` } })
         if(pendingResult.status === 200){
           setWorkingTask(pendingResult.data.updatedTaskStatus)
         }
         break;
-      case "2":  // onGoing
+      case "2":  // OnGoing
         updatedTask = { ...task, taskStatus: 'Ongoing' }
         let workingResult = await AxiosService.put(`${ApiRoutes.STATUSUPDATE.path}/${updatedTask.taskId}`, {taskStatus: 'Ongoing'},{ headers : { 'Authorization' : `${getLoginToken}` } })
         if(workingResult.status === 200) {
           setWorkingTask(workingResult.data.updatedTaskStatus)
         }
         break;
-      case "3":  // DONE
+      case "3":  // Completed
         updatedTask = { ...task, taskStatus: 'Completed' }
         let completedResult = await AxiosService.put(`${ApiRoutes.STATUSUPDATE.path}/${updatedTask.taskId}`, {taskStatus: 'Completed'},{ headers : { 'Authorization' : `${getLoginToken}` } })
         if(completedResult.status === 200) {
@@ -76,9 +76,9 @@ function Board({tasksList,inComplete, setInComplete, workingTask, setWorkingTask
   return <>
     <DragDropContext onDragEnd={handleDragEnd}>
       <div className='d-flex flex-row justify-content-between align-items-center'>
-        <Column title={"Pending"} tasks={inComplete} tasksList={inComplete} id={'1'}/>
-        <Column title={"On-Going"} tasks={workingTask} tasksList={workingTask} id={'2'}/>
-        <Column title={"Completed"} tasks={completed} tasksList={completed} id={'3'}/>
+        <Column title={"Pending"} tasks={inComplete} id={'1'}/>
+        <Column title={"On-Going"} tasks={workingTask} id={'2'}/>
+        <Column title={"Completed"} tasks={completed} id={'3'}/>
       </div>
     </DragDropContext>
   </>

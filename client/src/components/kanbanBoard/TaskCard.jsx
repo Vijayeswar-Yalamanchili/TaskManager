@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Button, Card, Form, Modal, Spinner } from 'react-bootstrap'
+import React, { useRef, useState } from 'react'
+import { Button, Form, Modal, Spinner } from 'react-bootstrap'
 import { Draggable } from 'react-beautiful-dnd'
-import './kanbanBoard.css'
 import { toast } from 'react-toastify'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import useFormattedDateTime from '../../hooks/UseFormattedDateTime'
+import './kanbanBoard.css'
 import AxiosService from '../../utils/AxiosService'
 import ApiRoutes from '../../utils/ApiRoutes'
 
@@ -47,7 +47,6 @@ function TaskCard({task, index}) {
   }
 
   const handleDeleteTask = async(taskId) => {
-    console.log("delete id : ",taskId)
     try {      
       let res = await AxiosService.delete(`${ApiRoutes.DELETETASK.path}/${taskId}`, { headers : { 'Authorization' : `${getLoginToken}` } })
       if(res.status === 200) {
@@ -85,8 +84,6 @@ function TaskCard({task, index}) {
             </div>
             <hr className='hrLine' />
             <p className='taskCardText'><b><i>Description</i></b> : {task.taskDetails[0].taskDescription}</p>
-            {/* <p className='taskCardText'>taskStatus : {task.taskStatus}</p> */}
-            {/* <p className='taskCardText'>Id : {task.taskDetails[0].UID}</p> */}
             <hr className='hrLine' />
             <p className='taskCardText' style={{fontSize : "x-small"}}>Updated At : {formattedDateTime}</p>
           </div>
@@ -98,25 +95,25 @@ function TaskCard({task, index}) {
     <Modal show={show} onHide={handleClose}>
       <Form>
         <Modal.Header closeButton>
-            <Modal.Title>Add New Task</Modal.Title>
+          <Modal.Title>Add New Task</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Group className="mb-3">
-              <Form.Label>Task Title</Form.Label>
-              <Form.Control style={{textTransform : 'capitalize'}} defaultValue={taskData[0]?.taskDetails[0]?.taskTitle} type="text" placeholder="Enter here" name='taskName' ref={taskNewTitle}/>
-            </Form.Group>   
-            <Form.Group className="mb-3">
-              <Form.Label>Task Description</Form.Label>
-              <Form.Control defaultValue={taskData[0]?.taskDetails[0]?.taskDescription} type="text" placeholder="Enter here" name='taskDescription' ref={taskNewDescription}/>
-            </Form.Group> 
-            <Form.Group className="mb-3">
-              <Form.Label>Task Status</Form.Label>
-              <Form.Select  ref={taskNewStatus} onChange={()=> taskNewStatus.current.value} default={taskData[0]?.taskDetails[0]?.taskStatus}>
-                <option value = "-">Update task status</option>
-                <option value="Pending">Pending</option>
-                <option value="Ongoing">Ongoing</option>
-                <option value="Completed">Completed</option>
-              </Form.Select> 
+            <Form.Label>Task Title</Form.Label>
+            <Form.Control style={{textTransform : 'capitalize'}} defaultValue={taskData[0]?.taskDetails[0]?.taskTitle} type="text" placeholder="Enter here" name='taskName' ref={taskNewTitle}/>
+          </Form.Group>   
+          <Form.Group className="mb-3">
+            <Form.Label>Task Description</Form.Label>
+            <Form.Control defaultValue={taskData[0]?.taskDetails[0]?.taskDescription} type="text" placeholder="Enter here" name='taskDescription' ref={taskNewDescription}/>
+          </Form.Group> 
+          <Form.Group className="mb-3">
+            <Form.Label>Task Status</Form.Label>
+            <Form.Select  ref={taskNewStatus} onChange={()=> taskNewStatus.current.value} default={taskData[0]?.taskDetails[0]?.taskStatus}>
+              <option value = "-">Update task status</option>
+              <option value="Pending">Pending</option>
+              <option value="Ongoing">Ongoing</option>
+              <option value="Completed">Completed</option>
+            </Form.Select> 
           </Form.Group>                           
         </Modal.Body>
         <Modal.Footer>

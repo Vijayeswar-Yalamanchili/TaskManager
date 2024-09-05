@@ -11,8 +11,6 @@ function Home() {
         {
             getLoginToken !== null ? <><AppNavbar/><HomeContent/></> : <ErrorScreen/> 
         }
-        {/* <AppNavbar/>
-        <HomeContent/>         */}
     </>
 }
 

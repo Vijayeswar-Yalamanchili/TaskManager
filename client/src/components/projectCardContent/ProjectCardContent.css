@@ -1,6 +1,4 @@
-.completed_wrapper,
-.ongoing_wrapper,
-.pending_wrapper {
+.completed_wrapper, .ongoing_wrapper, .pending_wrapper {
   width: 32%;
   min-height: 60vh;
   display: flex;
@@ -8,16 +6,12 @@
   padding: 5px;
 }
 
-.completed_wrapper > h3,
-.ongoing_wrapper > h3,
-.pending_wrapper > h3 {
-    text-align: center;
-    text-transform: capitalize;
+.completed_wrapper > h3, .ongoing_wrapper > h3, .pending_wrapper > h3 {
+  text-align: center;
+  text-transform: capitalize;
 }
 
-.pending_container,
-.ongoing_container,
-.completed_container {
+.pending_container, .ongoing_container, .completed_container {
   width: 100%;
   min-height: 68svh;
   display: flex;
@@ -27,9 +21,7 @@
   border-radius: 5px;
 }
 
-.pending_items,
-.ongoing_items,
-.completed_items {
+.pending_items, .ongoing_items, .completed_items {
   width: 100%;
   border-radius: 5px;
   margin-bottom: 10px;

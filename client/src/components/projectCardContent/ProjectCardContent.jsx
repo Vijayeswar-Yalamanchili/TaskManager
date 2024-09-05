@@ -1,13 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { Breadcrumb, Button, Container, Modal, Form, Spinner, Card } from 'react-bootstrap'
+import { Breadcrumb, Button, Modal, Form, Spinner } from 'react-bootstrap'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { jwtDecode } from 'jwt-decode'
-import { DragDropContext,Draggable,Droppable } from 'react-beautiful-dnd'
+import './ProjectCardContent.css'
 import AxiosService from '../../utils/AxiosService'
 import ApiRoutes from '../../utils/ApiRoutes'
-import { format } from 'date-fns'
-import './ProjectCardContent.css'
 import Board from '../kanbanBoard/Board'
 
 function ProjectCardContent() {
@@ -80,14 +78,12 @@ function ProjectCardContent() {
             let working = result.filter((task) => task.taskStatus === "Ongoing" ? task : null)
             let completed = result.filter((task) => task.taskStatus === "Completed" ? task : null)
             if(res.status === 200){
-                // console.log(result)
                 setTasksList(result)
                 setInComplete(todos)
                 setWorkingTask(working)
                 setCompleted(completed)
             }
         } catch (error) {
-            console.log(error.message)
             toast.error(error.response.data.message || error.message)
         }
     }
@@ -105,12 +101,10 @@ function ProjectCardContent() {
             </Breadcrumb>
 
             {/* ADDTASK */}
-            {/* <Container> */}
                 <div className='d-flex justify-content-between'>
                     <h3>Progress Board</h3>
                     <Button onClick={handleShow}>Add Task</Button>
                 </div>
-            {/* </Container> */}
 
             {/* TaskColumn */}
             <div className='mt-3'>                
@@ -153,58 +147,3 @@ function ProjectCardContent() {
 }
 
 export default ProjectCardContent
-
-{/* 
-<div style={{backgroundColor : 'red'}}>
-    {
-        todoList.length > 0 && todoList.map((e,i) => {
-            let formattedDateTime = useFormattedDateTime(e.ModifiedAt)
-            return <Card key={i} className='m-2'  style={{width : '22rem'}}>
-                <p>ProjectId : {e.projectId}</p>
-                <p>ProjectName : {e.projectName}</p>
-                <Card.Title className='mx-2 mt-2'>TaskTitle : {e.taskTitle}</Card.Title>
-                <Card.Body>
-                    <p>TaskDescription : {e.taskDescription}</p>
-                    <p>TaskStatus : {e.taskStatus}</p>
-                </Card.Body>
-                <hr className='mx-3'/>
-                <p className='px-3' style={{fontSize : 'smaller'}}>Last Updated At : {format(e.ModifiedAt, "dd/MM/yyyy")}</p>
-            </Card>
-        })
-    }
-</div>
-<div style={{backgroundColor : 'green'}}>
-    {
-        pendingList.length > 0 && pendingList.map((e,i) => {
-            return <Card key={i} className='m-2'  style={{width : '22rem'}}>
-                <p>ProjectId : {e.projectId}</p>
-                <p>ProjectName : {e.projectName}</p>
-                <Card.Title className='mx-2 mt-2'>TaskTitle : {e.taskTitle}</Card.Title>
-                <Card.Body>
-                    <p>TaskDescription : {e.taskDescription}</p>
-                    <p>TaskStatus : {e.taskStatus}</p>
-                </Card.Body>
-                <hr className='mx-3'/>
-                <p className='px-3' style={{fontSize : 'smaller'}}>Last Updated At : {format(e.ModifiedAt, "dd/MM/yyyy")}</p>
-            </Card>
-        })
-    }
-</div>
-<div style={{backgroundColor : 'blue'}}>
-    {
-        completedList.length > 0 && completedList.map((e,i) => {
-            return <Card key={i} className='m-2'  style={{width : '22rem'}}>
-                <p>ProjectId : {e.projectId}</p>
-                <p>ProjectName : {e.projectName}</p>
-                <Card.Title className='mx-2 mt-2'>TaskTitle : {e.taskTitle}</Card.Title>
-                <Card.Body>
-                    <p>TaskDescription : {e.taskDescription}</p>
-                    <p>TaskStatus : {e.taskStatus}</p>
-                </Card.Body>
-                <hr className='mx-3'/>
-                <p className='px-3' style={{fontSize : 'smaller'}}>Last Updated At : {format(e.ModifiedAt, "dd/MM/yyyy")}</p>
-            </Card>
-        })
-    }
-</div>
-*/}

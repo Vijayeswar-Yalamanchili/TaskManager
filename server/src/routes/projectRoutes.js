@@ -10,6 +10,4 @@ router.get('/getcurrentprojectcarddata/:userId/:projectId',auth.authenticate, pr
 router.put('/updatedprojectcardname/:projectId',auth.authenticate, projectController.updateCurrentProjectData)
 router.delete('/deleteproject/:projectId',auth.authenticate, projectController.deleteCurrentProject)
 
-// router.get('/getcurrentprojectdata/:id',auth.authenticate, projectController.getCurrentProjectData)
-
 export default router

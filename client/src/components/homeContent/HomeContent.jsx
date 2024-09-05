@@ -2,9 +2,9 @@ import React, { useEffect, useState, useMemo } from 'react'
 import { Button, Modal, Form, Spinner, Card, Row, Col } from 'react-bootstrap'
 import { jwtDecode } from 'jwt-decode'
 import { toast } from 'react-toastify'
+import './HomeContent.css'
 import AxiosService from '../../utils/AxiosService'
 import ApiRoutes from '../../utils/ApiRoutes'
-import './HomeContent.css'
 import AddProjectCard from '../common/addProjectCard/AddProjectCard'
 
 function HomeContent() {

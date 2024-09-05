@@ -1,13 +1,7 @@
 import mysql from 'mysql2'
 import dotenv from 'dotenv'
-dotenv.config()
 
-// const connection = mysql.createConnection({
-//   host: 'localhost',   // or '172.17.0.1' or whatever your Docker host is
-//   user: 'root',
-//   password: 'password',
-//   database: 'taskmanager'
-// });
+dotenv.config()
 
 const connection = mysql.createConnection({
     host: process.env.DB_HOST,

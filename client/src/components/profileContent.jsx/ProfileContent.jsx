@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Card, Form, Button } from  'react-bootstrap'
+import { Card, Form, Button, Spinner } from  'react-bootstrap'
+import { jwtDecode } from 'jwt-decode'
+import { toast } from 'react-toastify'
 import './ProfileContent.css'
 import AxiosService from '../../utils/AxiosService'
 import ApiRoutes from '../../utils/ApiRoutes'
-import { jwtDecode } from 'jwt-decode'
-import { toast } from 'react-toastify'
 
 function ProfileContent() {
     let firstName = useRef()
@@ -76,8 +76,8 @@ function ProfileContent() {
                 </Form.Group>
                 {
                     buttonChange ? 
-                    <Button variant='primary' style={{width : "100%"}} onClick={editUserData}>Save</Button>
-                    : <Button variant='secondary' style={{width : "100%"}} onClick={()=> setButtonChange(!buttonChange)}>Edit</Button>
+                    <Button variant='primary' style={{width : "100%"}} onClick={editUserData} disabled={loading}> {loading ? <Spinner animation="border" /> : 'Save'} </Button>
+                    : <Button variant='secondary' style={{width : "100%"}} onClick={()=> setButtonChange(!buttonChange)} disabled={loading}> {loading ? <Spinner animation="border" /> : 'Edit'} </Button>
                 }
             </div>
         </Card.Body>

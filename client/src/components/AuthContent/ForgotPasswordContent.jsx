@@ -26,15 +26,15 @@ function ForgotPasswordContent() {
     onSubmit : async(values) => {
         try {
           setLoading(true)
-          // if(values.password === values.confirmPassword){
+          if(values.password === values.confirmPassword){
             let res = await AxiosService.post(`${ApiRoutes.FORGOTPASSWORD.path}`,values)
             if(res.status === 200){
                 navigate('/')
             }
             setLoading(false)
-          // }else{
-          //   toast.error("Passwords doesnt match! Please enter the same passwords")
-          // }        
+          }else{
+            toast.error("Passwords doesnt match! Please enter the same passwords")
+          }        
         } catch (error) {
             toast.error(error.response.data.message || error.message)
             setLoading(false)

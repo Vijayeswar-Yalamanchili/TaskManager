@@ -1,15 +1,15 @@
 import React from 'react'
-import io from 'socket.io-client'
 import AppNavbar from '../../components/common/appNavbar/AppNavbar'
 import ProjectCardContent from '../../components/projectCardContent/ProjectCardContent'
-
-let serverBaseURL = import.meta.env.VITE_SERVER_URL
-// const socket = io.connect(serverBaseURL)
+import ErrorScreen from '../../components/common/errorScreen/ErrorScreen'
 
 function ProjectCard() {
+  const getLoginToken = localStorage.getItem('loginToken')
+
   return <>
-    <AppNavbar/>
-    <ProjectCardContent/>
+    {
+      getLoginToken !== null ? <><AppNavbar/><ProjectCardContent/></> : <ErrorScreen/> 
+    }
   </>
 }
 
