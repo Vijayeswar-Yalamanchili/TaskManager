@@ -67,6 +67,10 @@ const ApiRoutes = {
     path : '/task/updatetask',
     authenticate : true
   },
+  DELETETASK : {
+    path : '/task/deletetask',
+    authenticate : true
+  }
 }
 
 export default ApiRoutes

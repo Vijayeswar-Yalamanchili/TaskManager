@@ -42,22 +42,29 @@ const getTasksList = async(req,res) => {
 }
 
 const statusUpdate = async(req,res) => {
-    const { taskId } = req.params
-    const { taskStatus } = req.body
-    db.query(`UPDATE tasks SET taskStatus=?,updatedAt=? WHERE taskId=?`,[taskStatus,new Date(),taskId],async(err,result) => {
-        if(err) throw err
-        if(result){
-            const updatedTaskStatus = result
-            res.status(200).send({
-                updatedTaskStatus
-            })
-        }
-    })
+    try {
+        const { taskId } = req.params
+        const { taskStatus } = req.body
+        db.query(`UPDATE tasks SET taskStatus=?,updatedAt=? WHERE taskId=?`,[taskStatus,new Date(),taskId],async(err,result) => {
+            if(err) throw err
+            if(result){
+                const updatedTaskStatus = result
+                res.status(200).send({
+                    updatedTaskStatus
+                })
+            }
+        })
+    } catch (error) {
+        res.status(500).send({
+            message : "Internal server error in Updating status of task"
+        })
+    }
 }
 
 const getCurrentTaskData = async(req,res) => {
-    const { taskId } = req.params
-    const checkTaskIdQuery = `SELECT * FROM tasks WHERE taskId = ?`
+    try {
+        const { taskId } = req.params
+        const checkTaskIdQuery = `SELECT * FROM tasks WHERE taskId = ?`
         db.query(checkTaskIdQuery,[taskId],async(err,result) => {            
             if(err) throw err
             if(result){
@@ -67,21 +74,54 @@ const getCurrentTaskData = async(req,res) => {
                 })
             }
         })
+    } catch (error) {
+        res.status(500).send({
+            message : "Internal server error in getting current task"
+        }) 
+    }
 }
 
 const updateTask = async(req,res) => {
-    const { taskId } = req.params
-    const { taskStatus, taskDescription, taskTitle} = req.body
-    db.query(`UPDATE tasks SET taskStatus = ?, updatedAt = ?, taskDetails = JSON_SET(taskDetails,'$[0].taskTitle' , ?,'$[0].taskDescription' , ?) WHERE taskId=?`,[taskStatus,new Date(),taskTitle,taskDescription,taskId],async(err,result) => {
-        if(err) throw err
-        if(result){
-            const updatedTaskData = result
-            res.status(200).send({
-                updatedTaskData,
-                message : "Task Updated"
-            })
-        }
-    })
+    try {
+        const { taskId } = req.params
+        const { taskStatus, taskDescription, taskTitle} = req.body
+        const updateQuery = `UPDATE tasks SET taskStatus = ?, updatedAt = ?, taskDetails = JSON_SET(taskDetails,'$[0].taskTitle' , ?,'$[0].taskDescription' , ?) WHERE taskId=?`
+        db.query(updateQuery,[taskStatus,new Date(),taskTitle,taskDescription,taskId],async(err,result) => {
+            if(err) throw err
+            if(result){
+                const updatedTaskData = result
+                res.status(200).send({
+                    updatedTaskData,
+                    message : "Task Updated"
+                })
+            }
+        })
+    } catch (error) {
+        res.status(500).send({
+            message : "Internal server error in updating task"
+        })
+    }
+}
+
+const deleteTask = async(req,res) => {
+    try {
+        const { taskId } = req.params
+        const deleteQuery = `DELETE FROM tasks WHERE taskId = ?`
+        db.query(deleteQuery,[taskId],async(err,result) => {            
+            if(err) throw err
+            if(result){
+                const deletedTask = result
+                res.status(200).send({
+                    message : 'Task removed successfully',
+                    deletedTask
+                })
+            }
+        })
+    } catch (error) {
+        res.status(500).send({
+            message : "Internal server error in deleting task"
+        })
+    }
 }
 
 export default {
@@ -89,5 +129,6 @@ export default {
     getTasksList,
     statusUpdate,
     getCurrentTaskData,
-    updateTask
+    updateTask,
+    deleteTask
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Button, Card, Form, Modal, Spinner } from 'react-bootstrap'
 import { Draggable } from 'react-beautiful-dnd'
 import './kanbanBoard.css'
-import { Container } from 'react-bootstrap'
+import { toast } from 'react-toastify'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import useFormattedDateTime from '../../hooks/UseFormattedDateTime'
@@ -21,7 +21,7 @@ function TaskCard({task, index}) {
   let getLoginToken = localStorage.getItem('loginToken')
 
   const handleClose = () => setShow(false)
-  const handleEditShow = (uid,taskId) => {
+  const handleEditShow = (taskId) => {
     setShow(true)
     getTaskData(taskId)
   } 
@@ -46,8 +46,19 @@ function TaskCard({task, index}) {
     }
   }
 
-  const handleDeleteTask = (uid,id) => {
-    console.log("delete id : ",id)
+  const handleDeleteTask = async(taskId) => {
+    console.log("delete id : ",taskId)
+    try {      
+      let res = await AxiosService.delete(`${ApiRoutes.DELETETASK.path}/${taskId}`, { headers : { 'Authorization' : `${getLoginToken}` } })
+      if(res.status === 200) {
+        handleClose()
+        toast.success(res.data.message)
+        setLoading(false)
+      }      
+    } catch (error) {
+      toast.error(error.response.data.message || error.message)
+      setLoading(false)
+    }
   }
 
   const getTaskData = async(taskId) => {
@@ -69,8 +80,8 @@ function TaskCard({task, index}) {
             <div className='d-flex mt-2' style={{ width: "100%" }}>
               <p className='taskCardText mb-0'>Title : {task.taskDetails[0].taskTitle}</p>
               <div className='buttons d-flex'>
-                <div className='editBtn' onClick={() => handleEditShow(task.taskDetails[0].UID, task.taskId)}><FontAwesomeIcon icon={faEdit} /></div>
-                <div className='deleteBtn' onClick={() => handleDeleteTask(task.taskDetails[0].UID, task.taskId)}><FontAwesomeIcon icon={faTrash} /></div>
+                <div className='editBtn' onClick={() => handleEditShow(task.taskId)}><FontAwesomeIcon icon={faEdit} /></div>
+                <div className='deleteBtn' onClick={() => handleDeleteTask(task.taskId)}><FontAwesomeIcon icon={faTrash} /></div>
               </div>
             </div>
             <hr className='hrLine' />
