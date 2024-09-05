@@ -42,28 +42,25 @@ function Board({tasksList,inComplete, setInComplete, workingTask, setWorkingTask
     let updatedTask;
     switch (destinationDroppableId) {
       case "1":   // TO DO
-        updatedTask = { ...task, taskStatus: 'Pending' };
-        console.log("updatedTask : ",updatedTask)
+        updatedTask = { ...task, taskStatus: 'Pending' }
         let pendingResult = await AxiosService.put(`${ApiRoutes.STATUSUPDATE.path}/${updatedTask.taskId}`, {taskStatus: 'Pending'},{ headers : { 'Authorization' : `${getLoginToken}` } })
-        setWorkingTask(pendingResult.data.updatedTaskStatus)
-        // setInComplete([updatedTask, ...inComplete]);
-        console.log("inComplete : ", inComplete)
+        if(pendingResult.status === 200){
+          setWorkingTask(pendingResult.data.updatedTaskStatus)
+        }
         break;
       case "2":  // onGoing
-        updatedTask = { ...task, taskStatus: 'Ongoing' };
-        console.log("updatedTask : ",updatedTask)
+        updatedTask = { ...task, taskStatus: 'Ongoing' }
         let workingResult = await AxiosService.put(`${ApiRoutes.STATUSUPDATE.path}/${updatedTask.taskId}`, {taskStatus: 'Ongoing'},{ headers : { 'Authorization' : `${getLoginToken}` } })
-        setWorkingTask(workingResult.data.updatedTaskStatus)
-        // setWorkingTask([updatedTask, ...workingTask]);
-        console.log("workingTask : ", workingTask)
+        if(workingResult.status === 200) {
+          setWorkingTask(workingResult.data.updatedTaskStatus)
+        }
         break;
       case "3":  // DONE
-        updatedTask = { ...task, taskStatus: 'Completed' };
-        console.log("updatedTask : ",updatedTask.taskId)
+        updatedTask = { ...task, taskStatus: 'Completed' }
         let completedResult = await AxiosService.put(`${ApiRoutes.STATUSUPDATE.path}/${updatedTask.taskId}`, {taskStatus: 'Completed'},{ headers : { 'Authorization' : `${getLoginToken}` } })
-        setCompleted(completedResult.data.updatedTaskStatus)
-        // setCompleted([updatedTask, ...completed]);
-        console.log("completed : ", completed)
+        if(completedResult.status === 200) {
+          setCompleted(completedResult.data.updatedTaskStatus)
+        }
         break;
     }
   }

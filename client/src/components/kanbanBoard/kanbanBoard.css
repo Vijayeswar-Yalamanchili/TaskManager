@@ -2,7 +2,7 @@
     background-color: rgba(158, 171, 186, 0.493);
     color: wheat;
     border-radius: 10px;
-    width: 300px;
+    width: 330px;
     height: 475px;
     overflow-y: scroll;
     -ms-overflow-style: none;
@@ -29,14 +29,43 @@
 }
 
 .taskCardContainer{
-    /* background-color: ${(props) => bgColorChange(props)}; */
+    width: 100%;
     color: #000;
     border-radius: 10px;
-    margin: 0.5rem 0.25rem;
+    margin: 0.5rem 0.25rem 0.5rem 0;
     padding: 0 8px ;
     margin-bottom: 8px;
     min-height: 90px;
     cursor: pointer;
     justify-content: space-between;
     background-color: white;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: start;
+}
+
+.taskCardText {
+    width: 100%;
+}
+
+.buttons{
+    width: max-content;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 10px;
+    color: grey;
+}
+
+.editBtn:hover {
+    color: rgba(135, 124, 124, 0.655);
+}
+
+.deleteBtn:hover {
+    color: rgba(255, 0, 0, 0.655);
+}
+
+.hrLine{
+    border: 1px solid grey;
+    width: 100%;
+    margin: 0.75rem 0;
 }

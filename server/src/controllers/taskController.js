@@ -44,7 +44,7 @@ const getTasksList = async(req,res) => {
 const statusUpdate = async(req,res) => {
     const { taskId } = req.params
     const { taskStatus } = req.body
-    db.query(`UPDATE tasks SET taskStatus=? WHERE taskId=?`,[taskStatus,taskId],async(err,result) => {
+    db.query(`UPDATE tasks SET taskStatus=?,updatedAt=? WHERE taskId=?`,[taskStatus,new Date(),taskId],async(err,result) => {
         if(err) throw err
         if(result){
             const updatedTaskStatus = result
