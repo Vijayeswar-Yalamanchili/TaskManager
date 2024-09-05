@@ -78,18 +78,18 @@ function TaskCard({task, index}) {
         (provided,snapshot) => <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} isDragging={snapshot.isDragging}>
           <div className='taskCardContainer d-flex'>
             <div className='d-flex mt-2' style={{ width: "100%" }}>
-              <p className='taskCardText mb-0'>Title : {task.taskDetails[0].taskTitle}</p>
+              <p className='taskCardText mb-0'><b><i>Title</i></b> : {task.taskDetails[0].taskTitle}</p>
               <div className='buttons d-flex'>
                 <div className='editBtn' onClick={() => handleEditShow(task.taskId)}><FontAwesomeIcon icon={faEdit} /></div>
                 <div className='deleteBtn' onClick={() => handleDeleteTask(task.taskId)}><FontAwesomeIcon icon={faTrash} /></div>
               </div>
             </div>
             <hr className='hrLine' />
-            <p className='taskCardText'>Description : {task.taskDetails[0].taskDescription}</p>
-            <p className='taskCardText'>taskStatus : {task.taskStatus}</p>
-            <p className='taskCardText'>Id : {task.taskDetails[0].UID}</p>
+            <p className='taskCardText'><b><i>Description</i></b> : {task.taskDetails[0].taskDescription}</p>
+            {/* <p className='taskCardText'>taskStatus : {task.taskStatus}</p> */}
+            {/* <p className='taskCardText'>Id : {task.taskDetails[0].UID}</p> */}
             <hr className='hrLine' />
-            <p className='taskCardText'>Updated At : {formattedDateTime}</p>
+            <p className='taskCardText' style={{fontSize : "x-small"}}>Updated At : {formattedDateTime}</p>
           </div>
           {provided.placeholder}
         </div>
