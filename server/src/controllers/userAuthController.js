@@ -6,8 +6,7 @@ const login = async(req,res) => {
     try {
         const {email,password} = req.body
         // check if user exists and login
-        const checkUserEmailQuery = `SELECT * FROM userauths WHERE email = ?`
-        db.query(checkUserEmailQuery,[email],async(err,result) => {
+        db.query(`SELECT * FROM userauths WHERE email = ?`,[email],async(err,result) => {
             if(err) throw err
             if(result.length === 0){
                 res.status(400).send({
@@ -17,7 +16,7 @@ const login = async(req,res) => {
             const user = result[0]
             if(await hash.hashCompare(password,user.password)){
                 db.query(`UPDATE userauths SET isLoggedIn = 1 WHERE email = ?`,[user.email],async(err,updated)=> {
-                    if (err) return res.status(500).json({ error: 'Failed to update user login status' })
+                    if (err) return res.status(500).send({ message: 'Failed to update user login status' })
                     if(updated){
                         const loginToken = await auth.createLoginToken({
                             id : user.userId,
@@ -139,9 +138,24 @@ const logout = async(req,res) => {
     }
 }
 
+const sendMobileOTP = async(req,res) => {
+    // const { mobile } = req.body
+    // db.query(`SELECT * FROM userauths WHERE mobile = ?`,[mobile],async(err,result) => {
+    //     if(err) throw err
+    //     if(result.length === 0) {
+    //         res.status(400).send({
+    //             message : `Mobile number not found`
+    //         })
+    //     } else{
+
+    //     }
+    // })
+}
+
 export default {
     login,
     register,
     forgotPassword,
-    logout
+    logout,
+    sendMobileOTP
 }

@@ -3,6 +3,14 @@ const ApiRoutes = {
       path : '/users/login',
       authenticate : false
   },
+  GENERATEOTP : {
+    path : '/users/generate-otp',
+    authenticate : false
+  },
+  VERIFYOTP : {
+    path : '/users/verify-otp',
+    authenticate : false
+  },
   REGISTER : {
     path : '/users/register',
     authenticate : false

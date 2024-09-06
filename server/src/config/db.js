@@ -34,6 +34,17 @@ connection.connect((err) => {
         // console.log('Users table ready...')
     })
 
+    const otpsTable = `CREATE TABLE IF NOT EXISTS otps (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        mobile VARCHAR(45) NOT NULL UNIQUE,
+        hashedOtp VARCHAR(255) NOT NULL,
+        createdAt DATETIME DEFAULT NULL
+    );`
+    connection.query(otpsTable,(err)=> {
+        if (err) throw err
+        // console.log('otps table ready...')
+    })
+
     const newprojectsTable = `CREATE TABLE IF NOT EXISTS projects (
         projectId INT AUTO_INCREMENT PRIMARY KEY,
         userId VARCHAR(45) NOT NULL,
