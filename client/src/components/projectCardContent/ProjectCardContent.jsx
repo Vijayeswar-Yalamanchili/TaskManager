@@ -24,7 +24,7 @@ function ProjectCardContent() {
     const [currentProjectCard, setCurrentProjectCard] = useState([])
     const getLoginToken = localStorage.getItem('loginToken')
     let decodedToken = jwtDecode(getLoginToken)
-    let userId = decodedToken.id
+    let userId = decodedToken.userId
 
     const handleClose = () => setShow(false)
     const handleShow = () => setShow(true)

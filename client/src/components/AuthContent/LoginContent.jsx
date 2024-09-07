@@ -14,8 +14,8 @@ function LoginContent() {
   let navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [mobileLoginClicked,setMobileLoginClicked] = useState(false)
-  const [isOtpGenerated, setIsOtpGenerated ] = useState(false)
-  let { sharedMobileNumber, setSharedMobileNumber } = useContext(SharedDataContext)
+  const [isOtpGenerated, setIsOtpGenerated] = useState(false)
+  const { sharedMobileNumber, setSharedMobileNumber } = useContext(SharedDataContext)
 
   let emailFormik = useFormik({
     initialValues:{
@@ -101,7 +101,7 @@ function LoginContent() {
     <Container>
       <Col md xs={12}>
         {
-          !mobileLoginClicked ? 
+          mobileLoginClicked ? 
             !isOtpGenerated ? 
               <Form onSubmit={mobileFormik.handleSubmit} className='authForm mx-auto  p-5 rounded-5' style={{marginTop : "8rem"}}>                
                 <Form.Group className="mb-4">

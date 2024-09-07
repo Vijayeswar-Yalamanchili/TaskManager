@@ -16,7 +16,7 @@ function ProfileContent() {
     const [loading, setLoading] = useState(false)
     let getLoginToken = localStorage.getItem('loginToken')
     let decodedToken = jwtDecode(getLoginToken)
-    let userId = decodedToken.id
+    let userId = decodedToken.userId
 
     const editUserData = async() => {
         setLoading(true)

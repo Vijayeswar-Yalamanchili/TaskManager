@@ -103,19 +103,19 @@ const verifyOTP = async(req,res) => {
                     if(err) return err
                     if(result){
                         let user = result[0]
+                        const loginToken = await auth.createLoginToken({
+                            userId : user.userId,
+                            firstName: user.firstName,
+                            lastName : user.lastName,
+                            email:user.email,
+                            isLoggedIn : user.isLoggedIn,
+                            isAdmin : user.isAdmin
+                        })
+                        res.status(200).send({ 
+                            message: 'OTP verified successfully',
+                            loginToken
+                        })
                     }
-                })
-                const loginToken = await auth.createLoginToken({
-                    id : user.userId,
-                    firstName: user.firstName,
-                    lastName : user.lastName,
-                    email:user.email,
-                    isLoggedIn : user.isLoggedIn,
-                    isAdmin : user.isAdmin
-                })
-                res.status(200).send({ 
-                    message: 'OTP verified successfully',
-                    loginToken
                 })
             } else {
                 res.status(400).send({ message: 'Invalid OTP' })

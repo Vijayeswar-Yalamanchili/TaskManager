@@ -19,7 +19,7 @@ const login = async(req,res) => {
                     if (err) return res.status(500).send({ message: 'Failed to update user login status' })
                     if(updated){
                         const loginToken = await auth.createLoginToken({
-                            id : user.userId,
+                            userId : user.userId,
                             firstName: user.firstName,
                             lastName : user.lastName,
                             email:user.email,
