@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAddressCard, faBars, faHouse, faListCheck, faPowerOff } from '@fortawesome/free-solid-svg-icons'
 import { faUser } from '@fortawesome/free-regular-svg-icons'
 import { useLogout } from '../../../hooks/UseLogout'
+import logo from '../../../assets/logo.png'
 import "./AppNavbar.css"
 import ApiRoutes from '../../../utils/ApiRoutes'
 import AxiosService from '../../../utils/AxiosService'
@@ -60,7 +61,7 @@ function AppNavbar() {
             {
                 getLoginToken !== null ?
                     <div className='d-flex justify-content-between align-items-center px-3' style={{height : '100%'}}>
-                        <div><FontAwesomeIcon icon={faListCheck} style={{color : "white", height : "2.5rem"}} onClick={()=> navigate('/home')}/></div>
+                        <div><Image src={logo} style={{height : '4rem', width : '4.5rem',borderRadius : '25px'}} onClick={()=> navigate('/home')}/></div>
                         <div className='myNavsIcon d-flex'>
                             {
                                 userData?.image ? <Button variant='none' className='myNavTab'><Image src={userData?.image} onClick={()=>navigate('/profile')} style={{ height : '3rem', color : "white", borderRadius : "1.5rem"}}/></Button>
@@ -72,7 +73,7 @@ function AppNavbar() {
                     </div>  
                     :
                     <div className='d-flex justify-content-between align-items-center px-3' style={{height : '100%'}}>
-                        <div><FontAwesomeIcon icon={faListCheck} style={{color : "white", height : "2.5rem"}} onClick={()=> navigate('/')}/></div>
+                        <div><Image src={logo} style={{height : '4rem', width : '4.5rem',borderRadius : '25px'}} onClick={()=> navigate('/home')}/></div>
                         <div className='myNavs d-flex'>
                             <Link to={'/'} className='myNavTab' style={{textDecoration : "none",color : "white"}}>
                                 <Button variant='outline-light' className='myNavBtn'>Login</Button>
