@@ -15,7 +15,8 @@ Welcome to Task Manager! This Task Manager is a web application designed to help
     - **OTP based Authentication:** Secure OTP login with FAST2SMS API
     - **Task Creation:** Add new tasks with a description and due date.
     - **Task Management:** Edit, mark as complete/incomplete, or delete tasks.
-    - **Task Organization:** Sort tasks by due date, priority, or status.
+    - **Task Organization:** Sort tasks by priority, or status.
+    - **Drag and Drop** React-beautiful-dnd used to manage tasks ease.
     - **Responsive Design:** Works seamlessly across different devices, including desktops, tablets, and smartphones.
 
 ## Technologies Used
