@@ -1,7 +1,7 @@
 import React from 'react'
+import { Navigate } from 'react-router-dom'
 import AppNavbar from '../../components/common/appNavbar/AppNavbar'
 import HomeContent from '../../components/homeContent/HomeContent'
-import ErrorScreen from '../../components/common/errorScreen/ErrorScreen'
 
 function Home() {
 
@@ -9,7 +9,7 @@ function Home() {
 
     return <>
         {
-            getLoginToken !== null ? <><AppNavbar/><HomeContent/></> : <ErrorScreen/> 
+            getLoginToken !== null ? <><AppNavbar/><HomeContent/></> : <Navigate to={'/'}/> 
         }
     </>
 }

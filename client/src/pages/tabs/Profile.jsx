@@ -1,7 +1,7 @@
 import React from 'react'
+import { Navigate } from 'react-router-dom'
 import AppNavbar from '../../components/common/appNavbar/AppNavbar'
 import ProfileContent from '../../components/profileContent.jsx/ProfileContent'
-import ErrorScreen from '../../components/common/errorScreen/ErrorScreen'
 
 function Profile() {
 
@@ -10,7 +10,7 @@ function Profile() {
   return <>
 
     {
-      getLoginToken !== null ? <><AppNavbar/><ProfileContent/></> : <ErrorScreen/> 
+      getLoginToken !== null ? <><AppNavbar/><ProfileContent/></> : <Navigate to={'/'}/> 
     }
   </>
 }
