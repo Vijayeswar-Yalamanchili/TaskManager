@@ -47,7 +47,7 @@ function ProjectCardContent() {
             }
         }
         try {      
-            let res = await AxiosService.post(`${ApiRoutes.ADDTASK.path}/${currentProjectCard[0]?.projectId}`,taskData, { headers : { 'Authorization' : `${getLoginToken}` } })
+            let res = await AxiosService.post(`${ApiRoutes.ADDTASK.path}/${currentProjectCard[0]?._id}`,taskData, { headers : { 'Authorization' : `${getLoginToken}` } })
             setLoading(false)
             if(res.status === 200){
                 toast.success(res.data.message)
@@ -63,7 +63,7 @@ function ProjectCardContent() {
         try {
             let res = await AxiosService.get(`${ApiRoutes.GETCURRENTPROJECTCARDDATA.path}/${userId}/${id}`, {headers : { 'Authorization' : `${getLoginToken}` }})
             if(res.status === 200){
-                setCurrentProjectCard(res.data.list)
+                setCurrentProjectCard(res.data.currentProjectCardData)
             }
         } catch (error) {
             toast.error(error.response.data.message || error.message)
@@ -130,7 +130,7 @@ function ProjectCardContent() {
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                         <Form.Label>Task Status</Form.Label>
                         <Form.Select  ref={taskStatus} onChange={()=> taskStatus.current.value}>
-                            <option value = "-">Select task status</option>
+                            {/* <option value = "-">Select task status</option> */}
                             <option value="Pending">Pending</option>
                             <option value="Ongoing">Ongoing</option>
                             <option value="Completed">Completed</option>

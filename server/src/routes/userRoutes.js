@@ -1,10 +1,10 @@
 import express from 'express'
 import auth from '../helper/auth.js'
-import userAuthController from '../controllers/mysql/userAuthController.js'
-import userController from '../controllers/mysql/userController.js'
+// import userAuthController from '../controllers/mysql/userAuthController.js'
+// import userController from '../controllers/mysql/userController.js'
 import otpController from '../controllers/mysql/otpController.js'
-// import userAuthController from '../controllers/mongodb/userAuthController.js'
-// import userController from '../controllers/mongodb/userController.js'
+import userAuthController from '../controllers/mongodb/userAuthController.js'
+import userController from '../controllers/mongodb/userController.js'
 // import otpController from '../controllers/mongodb/otpController.js'
 
 const router = express.Router()

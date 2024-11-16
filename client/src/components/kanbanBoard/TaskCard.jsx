@@ -25,7 +25,7 @@ function TaskCard({task, index}) {
     setShow(true)
     getTaskData(taskId)
   } 
-  
+
   const handleEditTask= async(taskId) => {
     setLoading(true)
     let updatedDatas = {
@@ -71,15 +71,20 @@ function TaskCard({task, index}) {
   }
 
   return <>
-    <Draggable draggableId={`${task.taskId}`} key={task.taskId} index={index}>
+    {/* <Draggable draggableId={`${task.taskId}`} key={task.taskId} index={index}>  for sql*/}
+    <Draggable draggableId={`${task._id}`} key={task._id} index={index}>
       {
         (provided,snapshot) => <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} isDragging={snapshot.isDragging}>
           <div className='taskCardContainer d-flex'>
             <div className='d-flex mt-2' style={{ width: "100%" }}>
               <p className='taskCardText mb-0'><b><i>Title</i></b> : {task.taskDetails[0].taskTitle}</p>
               <div className='buttons d-flex'>
-                <div className='editBtn' onClick={() => handleEditShow(task.taskId)}><FontAwesomeIcon icon={faEdit} /></div>
-                <div className='deleteBtn' onClick={() => handleDeleteTask(task.taskId)}><FontAwesomeIcon icon={faTrash} /></div>
+                {/* for sql */}
+                {/* <div className='editBtn' onClick={() => handleEditShow(task.taskId)}><FontAwesomeIcon icon={faEdit} /></div>
+                <div className='deleteBtn' onClick={() => handleDeleteTask(task.taskId)}><FontAwesomeIcon icon={faTrash} /></div> */}
+                {/* for mongodb */}
+                <div className='editBtn' onClick={() => handleEditShow(task._id)}><FontAwesomeIcon icon={faEdit} /></div>
+                <div className='deleteBtn' onClick={() => handleDeleteTask(task._id)}><FontAwesomeIcon icon={faTrash} /></div>
               </div>
             </div>
             <hr className='hrLine' />
@@ -109,7 +114,7 @@ function TaskCard({task, index}) {
           <Form.Group className="mb-3">
             <Form.Label>Task Status</Form.Label>
             <Form.Select  ref={taskNewStatus} onChange={()=> taskNewStatus.current.value} default={taskData[0]?.taskDetails[0]?.taskStatus}>
-              <option value = "-">Update task status</option>
+              {/* <option value = "-">Update task status</option> */}
               <option value="Pending">Pending</option>
               <option value="Ongoing">Ongoing</option>
               <option value="Completed">Completed</option>
@@ -118,7 +123,8 @@ function TaskCard({task, index}) {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>Close</Button>
-          <Button variant="primary"  onClick={()=> handleEditTask(taskData[0]?.taskId)} disabled={loading}>{loading ? <Spinner animation="border" /> : 'Update'}</Button>
+          {/* <Button variant="primary"  onClick={()=> handleEditTask(taskData[0]?.taskId)} disabled={loading}>{loading ? <Spinner animation="border" /> : 'Update'}</Button> */}
+          <Button variant="primary"  onClick={()=> handleEditTask(taskData[0]?._id)} disabled={loading}>{loading ? <Spinner animation="border" /> : 'Update'}</Button>
         </Modal.Footer>
       </Form>
     </Modal>

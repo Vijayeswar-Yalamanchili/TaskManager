@@ -1,7 +1,7 @@
 import express from 'express'
 import auth from '../helper/auth.js'
-import projectController from '../controllers/mysql/projectController.js'
-// import projectController from '../controllers/mongodb/projectController.js'
+// import projectController from '../controllers/mysql/projectController.js'
+import projectController from '../controllers/mongodb/projectController.js'
 
 const router = express.Router()
 

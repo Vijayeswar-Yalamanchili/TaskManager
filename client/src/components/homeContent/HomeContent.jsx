@@ -15,7 +15,8 @@ function HomeContent() {
   const [loading, setLoading] = useState(false)
   let getLoginToken = localStorage.getItem('loginToken')
   let decodedToken = jwtDecode(getLoginToken)
-  let userId = decodedToken.userId
+  // let userId = decodedToken.userId
+  let userId = decodedToken.id
 
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
@@ -38,7 +39,7 @@ function HomeContent() {
     try {
       let res = await AxiosService.get(`${ApiRoutes.GETPROJECTSLIST.path}/${userId}`, { headers : { 'Authorization' : `${getLoginToken}` } })
       if(res.status === 200){
-        setProjectsList(res.data.list)
+        setProjectsList(res.data.projectsList)
       }
     } catch (error) {
       toast.error(error.response.data.message || error.message)

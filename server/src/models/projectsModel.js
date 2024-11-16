@@ -11,7 +11,7 @@ const projectsSchema = new mongoose.Schema({
     },
     tasks : {
         type : JSON,
-        required : true
+        required : false
     },
 },
 { timestamps : true },

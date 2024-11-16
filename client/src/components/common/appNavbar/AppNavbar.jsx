@@ -25,7 +25,8 @@ function AppNavbar() {
         try {
             if(getLoginToken)  {
                 const decodedToken = jwtDecode(getLoginToken)
-                const id = decodedToken.userId 
+                // const id = decodedToken.userId 
+                const id = decodedToken.id 
                 let res = await AxiosService.put(`${ApiRoutes.LOGOUT.path}/${id}`,{ headers : { 'Authorization' : ` ${getLoginToken}`}})
                 if(res.status === 200){
                     logout()
@@ -40,7 +41,8 @@ function AppNavbar() {
         try {
             if(getLoginToken){
                 let decodedToken = jwtDecode(getLoginToken)
-                let id = decodedToken.userId
+                // let id = decodedToken.userId
+                let id = decodedToken.id
                 let res = await AxiosService.get(`${ApiRoutes.CURRENTUSER.path}/${id}`, { headers : { 'Authorization' : `${getLoginToken}` } })
                 if(res.status === 200){
                     setUserData(res.data.user)

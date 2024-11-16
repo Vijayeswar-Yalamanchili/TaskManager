@@ -1,18 +1,13 @@
-import db from '../config/db.js'
+import TasksModel from '../../models/tasksModel.js'
+// import db from '../config/db.js'
 
 const addTask = async(req,res) => {
     try {
         const {task} = req.body
-        const taskStatus = task.taskStatus;
-        const taskDetails = JSON.stringify(task.taskDetails);
-        const addTaskQuery = `INSERT INTO tasks (projectId,taskStatus,taskDetails,createdAt,updatedAt) VALUES (?,?,?,?,?)`
-        db.query(addTaskQuery,[req.params.projectId,taskStatus,taskDetails,new Date(),new Date()], async(err,result) => {
-            if(err) throw err
-            if(result) {
-                res.status(200).send({
-                    message : "Task created successfully",
-                })
-            }  
+        const taskStatus = task.taskStatus
+        const addNewTask = await TasksModel.create({projectId : req.params.projectId, taskStatus : taskStatus, taskDetails : task.taskDetails})
+        res.status(200).send({
+            addNewTask
         })
     } catch (error) {
         res.status(500).send({
@@ -24,15 +19,9 @@ const addTask = async(req,res) => {
 const getTasksList = async(req,res) => {
     try {
         const { projectId } = req.params
-        const checkProjectIdQuery = `SELECT * FROM tasks WHERE projectId = ?`
-        db.query(checkProjectIdQuery,[projectId],async(err,result) => {            
-            if(err) throw err
-            if(result){
-                const list = result
-                res.status(200).send({
-                    list
-                })
-            }
+        let list = await TasksModel.find({projectId : projectId})
+        res.status(200).send({
+            list
         })
     } catch (error) {
         res.status(500).send({
@@ -45,15 +34,19 @@ const statusUpdate = async(req,res) => {
     try {
         const { taskId } = req.params
         const { taskStatus } = req.body
-        db.query(`UPDATE tasks SET taskStatus=?,updatedAt=? WHERE taskId=?`,[taskStatus,new Date(),taskId],async(err,result) => {
-            if(err) throw err
-            if(result){
-                const updatedTaskStatus = result
-                res.status(200).send({
-                    updatedTaskStatus
-                })
-            }
+        let updatedTaskStatus = await TasksModel.findByIdAndUpdate({_id : taskId}, {$set : {taskStatus : taskStatus}},{new : true})
+        res.status(200).send({
+            updatedTaskStatus
         })
+        // db.query(`UPDATE tasks SET taskStatus=?,updatedAt=? WHERE taskId=?`,[taskStatus,new Date(),taskId],async(err,result) => {
+        //     if(err) throw err
+        //     if(result){
+        //         const updatedTaskStatus = result
+        //         res.status(200).send({
+        //             updatedTaskStatus
+        //         })
+        //     }
+        // })
     } catch (error) {
         res.status(500).send({
             message : "Internal server error in Updating status of task"
@@ -64,15 +57,9 @@ const statusUpdate = async(req,res) => {
 const getCurrentTaskData = async(req,res) => {
     try {
         const { taskId } = req.params
-        const checkTaskIdQuery = `SELECT * FROM tasks WHERE taskId = ?`
-        db.query(checkTaskIdQuery,[taskId],async(err,result) => {            
-            if(err) throw err
-            if(result){
-                const currentTask = result
-                res.status(200).send({
-                    currentTask
-                })
-            }
+        let currentTask = await TasksModel.find({_id : req.params.taskId})
+        res.status(200).send({
+            currentTask
         })
     } catch (error) {
         res.status(500).send({
@@ -85,16 +72,9 @@ const updateTask = async(req,res) => {
     try {
         const { taskId } = req.params
         const { taskStatus, taskDescription, taskTitle} = req.body
-        const updateQuery = `UPDATE tasks SET taskStatus = ?, updatedAt = ?, taskDetails = JSON_SET(taskDetails,'$[0].taskTitle' , ?,'$[0].taskDescription' , ?) WHERE taskId=?`
-        db.query(updateQuery,[taskStatus,new Date(),taskTitle,taskDescription,taskId],async(err,result) => {
-            if(err) throw err
-            if(result){
-                const updatedTaskData = result
-                res.status(200).send({
-                    updatedTaskData,
-                    message : "Task Updated"
-                })
-            }
+        let updatedTaskData = await TasksModel.findByIdAndUpdate({_id : taskId}, {$set : {taskStatus : taskStatus, "taskDetails.0.taskDescription" : taskDescription,"taskDetails.0.taskTitle" : taskTitle}},{new : true})
+        res.status(200).send({
+            updatedTaskData
         })
     } catch (error) {
         res.status(500).send({
@@ -106,16 +86,9 @@ const updateTask = async(req,res) => {
 const deleteTask = async(req,res) => {
     try {
         const { taskId } = req.params
-        const deleteQuery = `DELETE FROM tasks WHERE taskId = ?`
-        db.query(deleteQuery,[taskId],async(err,result) => {            
-            if(err) throw err
-            if(result){
-                const deletedTask = result
-                res.status(200).send({
-                    message : 'Task removed successfully',
-                    deletedTask
-                })
-            }
+        let deletedTask = await TasksModel.findByIdAndDelete({_id :taskId},{new : true})
+        res.status(200).send({
+            deletedTask
         })
     } catch (error) {
         res.status(500).send({

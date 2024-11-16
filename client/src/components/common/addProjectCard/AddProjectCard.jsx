@@ -51,7 +51,7 @@ function AddProjectCard({cardData}) {
   const getCardData = async(userId,projectId) => {
     try {
       let res = await AxiosService.get(`${ApiRoutes.GETCURRENTPROJECTCARDDATA.path}/${userId}/${projectId}`,{ headers : { 'Authorization' : `${getLoginToken}` } })
-      setCardProjectName(res.data.list)
+      setCardProjectName(res.data.currentProjectCardData)
       setShow(true)
     } catch (error) {
       toast.error(error.response.data.message || error.message)
@@ -63,12 +63,20 @@ function AddProjectCard({cardData}) {
       <Card style={{width: "20rem",minHeight : "7rem"}} >
         <Card.Body className='d-flex cardDatas'>
           <div className='d-flex flex-row justify-content-between'>
-            <div className='cardText' onClick={() => navigate(`/home/${cardData.projectId}`)}>
+            {/* for sql */}
+            {/* <div className='cardText' onClick={() => navigate(`/home/${cardData.projectId}`)}>*/}
+            {/* for mongo */}
+            <div className='cardText' onClick={() => navigate(`/home/${cardData._id}`)}> 
               <p style={{fontSize : "large"}}>{cardData.projectName}</p>            
             </div>
             <div className='buttons d-flex'>
-              <div className='editBtn' onClick={() => handleShow(cardData.userId, cardData.projectId)}><FontAwesomeIcon icon={faEdit}/></div>
-              <div className='deleteBtn' onClick={() => handleDeleteProjectCard(cardData.projectId)}><FontAwesomeIcon icon={faTrash}/></div>
+              {/* for sql */}
+              {/* <div className='editBtn' onClick={() => handleShow(cardData.userId, cardData.projectId)}><FontAwesomeIcon icon={faEdit}/></div> // for sql */}
+              {/* <div className='deleteBtn' onClick={() => handleDeleteProjectCard(cardData.projectId)}><FontAwesomeIcon icon={faTrash}/></div>  // for sql */}
+
+              {/* for mongo */}
+              <div className='editBtn' onClick={() => handleShow(cardData.userId, cardData._id)}><FontAwesomeIcon icon={faEdit}/></div>
+              <div className='deleteBtn' onClick={() => handleDeleteProjectCard(cardData._id)}><FontAwesomeIcon icon={faTrash}/></div>
             </div>
           </div>
           <hr className='my-2'/>
@@ -90,7 +98,10 @@ function AddProjectCard({cardData}) {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>Close</Button>
-          <Button variant="primary" onClick={() => handleEditProjectCard(cardProjectName[0]?.projectId)} disabled={loading}>{loading ? <Spinner animation="border" /> : 'Save Changes'}</Button>
+          {/* foe sql */}
+          {/* <Button variant="primary" onClick={() => handleEditProjectCard(cardProjectName[0]?.projectId)} disabled={loading}>{loading ? <Spinner animation="border" /> : 'Save Changes'}</Button> */}
+          {/* for mongo */}
+          <Button variant="primary" onClick={() => handleEditProjectCard(cardProjectName[0]?._id)} disabled={loading}>{loading ? <Spinner animation="border" /> : 'Save Changes'}</Button>
         </Modal.Footer>
       </Form>
     </Modal>

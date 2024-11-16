@@ -6,39 +6,39 @@ const login = async(req,res) => {
     try {
         const {email,password} = req.body
         // check if user exists and login
-        // db.query(`SELECT * FROM userauths WHERE email = ?`,[email],async(err,result) => {
-        //     if(err) throw err
-        //     if(result.length === 0){
-        //         res.status(400).send({
-        //             message : `Email Not Found`
-        //         })
-        //     }
-        //     const user = result[0]
-        //     if(await hash.hashCompare(password,user.password)){
-        //         db.query(`UPDATE userauths SET isLoggedIn = 1 WHERE email = ?`,[user.email],async(err,updated)=> {
-        //             if (err) return res.status(500).send({ message: 'Failed to update user login status' })
-        //             if(updated){
-        //                 const loginToken = await auth.createLoginToken({
-        //                     userId : user.userId,
-        //                     firstName: user.firstName,
-        //                     lastName : user.lastName,
-        //                     email:user.email,
-        //                     isLoggedIn : user.isLoggedIn,
-        //                     isAdmin : user.isAdmin
-        //                 })
-        //                 res.status(200).send({
-        //                     message : "Login Successful",
-        //                     loginToken,
-        //                 })
-        //             }
-        //         })
+        db.query(`SELECT * FROM userauths WHERE email = ?`,[email],async(err,result) => {
+            if(err) throw err
+            if(result.length === 0){
+                res.status(400).send({
+                    message : `Email Not Found`
+                })
+            }
+            const user = result[0]
+            if(await hash.hashCompare(password,user.password)){
+                db.query(`UPDATE userauths SET isLoggedIn = 1 WHERE email = ?`,[user.email],async(err,updated)=> {
+                    if (err) return res.status(500).send({ message: 'Failed to update user login status' })
+                    if(updated){
+                        const loginToken = await auth.createLoginToken({
+                            userId : user.userId,
+                            firstName: user.firstName,
+                            lastName : user.lastName,
+                            email:user.email,
+                            isLoggedIn : user.isLoggedIn,
+                            isAdmin : user.isAdmin
+                        })
+                        res.status(200).send({
+                            message : "Login Successful",
+                            loginToken,
+                        })
+                    }
+                })
                 
-        //     }else {
-        //         res.status(400).send({
-        //             message : "Incorrect Password"
-        //         })
-        //     }
-        // })
+            }else {
+                res.status(400).send({
+                    message : "Incorrect Password"
+                })
+            }
+        })
     } catch (error) {
         res.status(500).send({
             message : "Internal server error in fetching email"

@@ -11,6 +11,7 @@ function Board({inComplete, setInComplete, workingTask, setWorkingTask, complete
 
   const handleDragEnd = (result) => {
     const { destination, source, draggableId} = result
+    // console.log(draggableId)
     if(!destination || source.droppableId === destination.droppableId) return
 
     // REMOVE FROM SOURCE COLUMN LIST
@@ -39,25 +40,28 @@ function Board({inComplete, setInComplete, workingTask, setWorkingTask, complete
   }
 
   const setNewState = async(destinationDroppableId, task) => {
-    let updatedTask;
+    let updatedTask
     switch (destinationDroppableId) {
       case "1":   // Pending
         updatedTask = { ...task, taskStatus: 'Pending' }
-        let pendingResult = await AxiosService.put(`${ApiRoutes.STATUSUPDATE.path}/${updatedTask.taskId}`, {taskStatus: 'Pending'},{ headers : { 'Authorization' : `${getLoginToken}` } })
+        // let pendingResult = await AxiosService.put(`${ApiRoutes.STATUSUPDATE.path}/${updatedTask.taskId}`, {taskStatus: 'Pending'},{ headers : { 'Authorization' : `${getLoginToken}` } })
+        let pendingResult = await AxiosService.put(`${ApiRoutes.STATUSUPDATE.path}/${updatedTask._id}`, {taskStatus: 'Pending'},{ headers : { 'Authorization' : `${getLoginToken}` } })
         if(pendingResult.status === 200){
           setWorkingTask(pendingResult.data.updatedTaskStatus)
         }
         break;
       case "2":  // OnGoing
         updatedTask = { ...task, taskStatus: 'Ongoing' }
-        let workingResult = await AxiosService.put(`${ApiRoutes.STATUSUPDATE.path}/${updatedTask.taskId}`, {taskStatus: 'Ongoing'},{ headers : { 'Authorization' : `${getLoginToken}` } })
+        // let workingResult = await AxiosService.put(`${ApiRoutes.STATUSUPDATE.path}/${updatedTask.taskId}`, {taskStatus: 'Ongoing'},{ headers : { 'Authorization' : `${getLoginToken}` } })
+        let workingResult = await AxiosService.put(`${ApiRoutes.STATUSUPDATE.path}/${updatedTask._id}`, {taskStatus: 'Ongoing'},{ headers : { 'Authorization' : `${getLoginToken}` } })
         if(workingResult.status === 200) {
           setWorkingTask(workingResult.data.updatedTaskStatus)
         }
         break;
       case "3":  // Completed
         updatedTask = { ...task, taskStatus: 'Completed' }
-        let completedResult = await AxiosService.put(`${ApiRoutes.STATUSUPDATE.path}/${updatedTask.taskId}`, {taskStatus: 'Completed'},{ headers : { 'Authorization' : `${getLoginToken}` } })
+        // let completedResult = await AxiosService.put(`${ApiRoutes.STATUSUPDATE.path}/${updatedTask.taskId}`, {taskStatus: 'Completed'},{ headers : { 'Authorization' : `${getLoginToken}` } })
+        let completedResult = await AxiosService.put(`${ApiRoutes.STATUSUPDATE.path}/${updatedTask._id}`, {taskStatus: 'Completed'},{ headers : { 'Authorization' : `${getLoginToken}` } })
         if(completedResult.status === 200) {
           setCompleted(completedResult.data.updatedTaskStatus)
         }
@@ -66,11 +70,13 @@ function Board({inComplete, setInComplete, workingTask, setWorkingTask, complete
   }
 
   const removeItemById = (id,array) => {
-    return array.filter((item) => item.taskId != id)
+    // return array.filter((item) => item.taskId != id)
+    return array.filter((item) => item._id != id)
   }
 
   const findItemById = (id,array) => {
-    return array.find((item) => item.taskId == id)
+    // return array.find((item) => item.taskId == id)
+    return array.find((item) => item._id == id)
   }
 
   return <>
